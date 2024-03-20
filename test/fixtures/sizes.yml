@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  abbreviation: MyString
+  stock_quantity: 1
+  product: one
+
+two:
+  name: MyString
+  abbreviation: MyString
+  stock_quantity: 1
+  product: two

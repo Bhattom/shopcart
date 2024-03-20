@@ -1,0 +1,10 @@
+<%= form_with(model: @user, remote: true) do |f| %>
+    <!-- Form fields go here -->
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+  <% end %>

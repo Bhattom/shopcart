@@ -1,0 +1,10 @@
+<h1>Line Item Details</h1>
+<div>
+<% if @product.images.attached? %>
+<%= image_tag @product.images.first, size:"250x250"%>
+<% end %>
+  <h2><%= @product.name %></h2>
+  <p>Size: <%= @product.size %></p>
+  <p>Price: <%= number_to_currency(@product.price) %></p>
+  <p>Description: <%= @product.desc %></p>
+</div>

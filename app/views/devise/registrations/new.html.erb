@@ -1,0 +1,58 @@
+
+
+
+
+
+
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+              <div class="card-body p-5 text-center">
+
+                <h3 class="mb-5">Sign up</h3>
+
+                <div class="form-outline mb-4">
+                  
+                <%= f.label :email %><br />
+                <%= f.email_field :email, autofocus: true, autocomplete: "email",class:"form-control form-control-lg" %>
+                </div>
+
+                <div class="form-outline mb-4">
+                <%= f.label :password %>
+                <% if @minimum_password_length %>
+                <em>(<%= @minimum_password_length %> characters minimum)</em>
+                <% end %><br />
+                <%= f.password_field :password, autocomplete: "new-password",class:"form-control form-control-lg" %>
+                </div>
+
+                <div class="form-outline mb-4">
+                <%= f.label :password_confirmation %><br />
+                <%= f.password_field :password_confirmation, autocomplete: "new-password",class:"form-control form-control-lg" %>
+                </div>
+
+                <div class="form-outline mb-4">
+                <%= f.hidden_field :role, value: 'guest' %>
+                </div>
+
+                <!-- Checkbox -->
+                <div class="form-check d-flex justify-content-start mb-4">
+                  <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
+                  <label class="form-check-label" for="form1Example3"> Remember password </label>
+                </div>
+
+                <%= f.submit "Sign up",class:"btn btn-primary btn-block mb-4" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<% end %>
+
+    

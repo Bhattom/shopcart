@@ -1,0 +1,29 @@
+<div class="nav">
+<h2> Products </h2>
+</div>
+<% if current_user.admin? %>
+<%= link_to "New Product", new_product_path , class:"btn btn-primary", style:"text-decoration: none;"%>
+<% end %><br><br>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
+    <% @products.each do |product|%>
+        <div class="card m-1" style="width: 18rem;">
+        <%= link_to product_path(product), style:"text-decoration: none;" do %>
+        <% if product.images.attached? %>
+          <%= image_tag product.images.first, class:"card-img-top", size:"250x250"%>
+        <% end %>
+        <div class="card-body">
+        <h5 class="card-title text-dark"><%= product.name %></h5>
+        <div class="text-dark">
+        <strong>Size:</strong> &nbsp <%= product.size %><br>
+        <strong>Price:</strong> &nbsp <%= number_to_currency(product.price, unit: "₹", format: "%u %n") %><br><br>
+        </div>
+        <%= link_to "Show Product", product_path(product), class:"btn btn-outline-success justify-content-center d-flex"%>
+        <% end %>
+        </div>
+    </div>
+    <% end %>
+    </div>
+
+
+    

@@ -1,0 +1,29 @@
+<% if user_signed_in? %> 
+ <div> Welcome <%= current_user.email %> </div> 
+  <%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
+<% else %>
+  <%= link_to "Sign in", new_user_session_path %>&nbsp &nbsp &nbsp
+  <%= link_to "sign_up", new_user_registration_path %>
+<% end %>
+<br>
+
+<table class="table table-bordered text-center">
+
+  <tr>
+    <th>User Email</th>
+    <th> User Role</th>
+    <th colspan=2> Action </th>
+  </tr>
+  <% @users.each do |user| %> 
+  <tr>
+    <td><%= user.email %></td>
+    <td><%= user.role %></td>
+    <td> <%= link_to "Edit", edit_user_registration_path(user), class:"btn btn-primary" %></td> 
+    <td> <%= button_to "Delete", user_path(user), method: :delete, class:"btn btn-danger" %></td> 
+  </tr>
+  <% end %>
+</table>
+
+<div class="pagination justify-content-center">
+ <%= paginate @users %>
+</div>

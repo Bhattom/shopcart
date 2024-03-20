@@ -1,0 +1,3 @@
+$('.quantity_<%= @lineitem.id %>').html("<strong>Quantity:&nbsp</strong> <%= j @lineitem.quantity %>");
+$('.price_<%= @lineitem.id %>').html("<strong>Price:</strong> &nbsp<%= number_to_currency(@lineitem.unit_price, unit: "₹", format: "%u %n") %>");
+$('.subtotal').html("<h4><strong>Cart Subtotal: </strong> &nbsp<%= number_to_currency(@cart.lineitems.sum(&:unit_price), unit: "₹", format: "%u %n") %></h4>");

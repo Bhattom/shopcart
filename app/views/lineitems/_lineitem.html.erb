@@ -1,0 +1,47 @@
+
+
+    <strong>Quantity:</strong> &nbsp <%= lineitem.quantity %><br>
+            <%= link_to "Add Quantity", increase_quantity_lineitem_path(lineitem), method: :patch, class:"btn btn-outline-success increase-quantity", remote: true%>
+    
+            <%= link_to "Remove Quantity", decrease_quantity_lineitem_path(lineitem), method: :patch, class:"btn btn-outline-danger decrease-quantity", remote: true%>
+            <script>
+            $(document).ready(function() {
+              $('.increase-quantity').click(function(event) {
+                event.preventDefault();
+                var lineitem_id = $(this).data('lineitem_id');
+                console.log("wwwwwwwwwwwww");
+                $.ajax({
+                    url: '/lineitems/' + lineitem_id + '/increase_quantity',
+                   method: 'PATCH', 
+                   dataType: 'script',
+                   data: { id: lineitem_id },
+                  success: function(response) {
+                    console.log('Quantity increased successfully');
+                   },
+                  error: function(xhr, status, error) {
+                  console.error('Error increasing quantity:', error);
+                  }
+                });
+              });
+      
+              $('.decrease-quantity').click(function(event) {
+                event.preventDefault();
+                var lineitem_id = $(this).data('lineitem_id');
+                $.ajax({
+                  url:'/lineitems/' + lineitem_id + '/decrease_quantity',
+                  method: 'PATCH', 
+                  dataType: 'script',
+                  data:{ id: lineitem_id },
+                  success: function(response) {
+              
+                  console.log('Quantity decreased successfully');
+        
+            },
+                error: function(xhr, status, error) {
+                console.error('Error decreasing quantity:', error);
+            }
+          });
+      
+              });
+            });
+          </script>

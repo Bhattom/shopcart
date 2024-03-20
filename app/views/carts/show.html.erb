@@ -1,0 +1,82 @@
+<html>
+<body>
+<h2> Your Cart </h2>
+<div class="d-flex justify-content-end">       
+   <%= link_to 'Continue Shopping', products_path, class:"btn btn-outline-success btn-lg" %>&nbsp &nbsp
+   <%= link_to 'Confirm Order', '#' , class:"btn btn-outline-success btn-lg" %>
+</div>
+<hr/>
+<div class="d-flex justify-content-end subtotal">
+  <h4><strong>Cart Subtotal: </strong><%= number_to_currency(@subtotal, unit: "₹", format: "%u %n") %></h4>
+</div>
+<% @cart.lineitems.each do |lineitem| %>
+
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-3">
+         <%= image_tag lineitem.product.images.first, size:"200x200"%><br>
+      </div>   
+      <div class="col-md-6">
+        <div style="font-size:21px;">
+          <h2><%= lineitem.product.name %></h2>
+          <strong>Product Description:</strong> &nbsp <%= lineitem.product.desc %><br>
+          <strong>Size:</strong> &nbsp <%= lineitem.product.size %><br>
+          <div class="price_<%= lineitem.id %>"> <strong>Price:</strong> &nbsp  <%= number_to_currency(lineitem.unit_price, unit: "₹", format: "%u %n") %></div>
+          <div class="quantity_<%= lineitem.id %>"><strong>Quantity:</strong> &nbsp <%= lineitem.quantity %></div>
+        </div>
+      </div>   
+      <div class="col-md-3 mt-2 d-flex justify-content-around align-items-center">
+        <%= link_to increase_quantity_lineitem_path(lineitem), method: :patch,remote: true, class:"increase-quantity"  do %>
+          <%= image_tag "https://cdn-icons-png.flaticon.com/128/3032/3032220.png",size:"35x35", alt: "Logo" %>
+        <% end %>
+
+        <%= link_to decrease_quantity_lineitem_path(lineitem), method: :patch,remote: true, class:"decrease-quantity" do %>
+          <%= image_tag "https://cdn-icons-png.flaticon.com/128/2740/2740653.png",size:"42x42"%>
+        <% end %>
+
+        <%= link_to remove_item_cart_path(lineitem), method: :delete, data: { confirm: "Are you sure?" },remote: true  do %>
+          <%= image_tag "https://cdn-icons-png.flaticon.com/128/1/1570.png",size:"35x35", alt: "Logo" %>
+        <% end %>
+      </div>
+      </div>
+      <br>
+      <hr>
+  
+  
+</div>
+<% end %>
+</body>
+</html>
+
+         <script>
+            $(document).ready(function() {
+              $('.increase-quantity').click(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/lineitems/increase_quantity',
+                   method: 'PATCH', 
+                   dataType: 'script',
+                  success: function(response) {
+                    console.log('Quantity increased successfully');
+                   }
+                });
+              });
+      
+              $('.decrease-quantity').click(function(event) {
+                event.preventDefault();
+                var lineitem_id = $(this).data('lineitem_id');
+                $.ajax({
+                  url:'/lineitems/decrease_quantity',
+                  method: 'PATCH', 
+                  dataType: 'script',
+                  data:{ id: lineitem_id },
+                  success: function(response) {
+                  console.log('Quantity decreased successfully');
+                  }
+          });
+      
+              });
+              
+            });
+          </script>
+
