@@ -3,6 +3,7 @@ class Product < ApplicationRecord
     has_many :sizes
     has_many :lineitems
     has_many_attached :images
+    has_many :similar_products
     
 
     validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

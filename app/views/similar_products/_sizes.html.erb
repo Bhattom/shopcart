@@ -1,0 +1,12 @@
+<% if sizes.any? %>
+  <h2>Sizes:</h2>
+  <ul>
+    <% sizes.each do |size| %>
+      <li>
+        <%= "#{size.name}: #{size.stock_quantity} in stock" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No sizes available for this product.</p>
+<% end %>

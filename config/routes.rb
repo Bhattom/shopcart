@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :products do
     post '/update_quantity', to: 'products#update_quantity'
+    resources :similar_products
   end 
   resources :carts do
     resources :lineitems

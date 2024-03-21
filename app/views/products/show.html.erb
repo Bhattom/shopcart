@@ -32,7 +32,7 @@
                 </button>
             </div>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-5 style="font-size:21px;" ">
         <h2><%= @product.name %></h2><br>
         <strong>Product Description:</strong> &nbsp <%= @product.desc %><br>
         <strong>Sizes:</strong> &nbsp <%= @product.sizes.pluck(:name).join(', ') %><br>
@@ -63,32 +63,36 @@
 <% end %>
 <br>
 <hr>
-<br>
-<div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
-<% @products.each do |product|%>
-    <div class="card m-1" style="width: 18rem;">
-    <%= link_to product_path(product), style:"text-decoration: none;" do %>
-    <% if product.images.attached? %>
-      <%= image_tag product.images.first, class:"card-img-top", size:"250x250"%>
-    <% end %>
-    <div class="card-body">
-    <h5 class="card-title text-dark"><%= product.name %></h5>
-    <div class="text-dark">
-    <strong>Size:</strong> &nbsp <%= product.size %><br>
-    <strong>Price:</strong> &nbsp <%= product.price %><br>
-    </div>
-    <%= link_to "Show Product", product_path(product), class:"btn btn-outline-success justify-content-center d-flex" %>
-    <% end %>
-    </div>
-</div>
+<% if current_user.admin? %>
+<%= link_to new_product_similar_product_path(@product), as:"Add Related Products" do %>
+  <h5><%= image_tag "https://cdn-icons-png.flaticon.com/128/3416/3416075.png",size:"30x30", alt: "Logo" %>
+  <%= link_to "Add Related Product", new_product_similar_product_path(@product), class:"style:font-size:21px; text-dark",style:"text-decoration: none;" %></h5>
+  <% end %>
 <% end %>
-</div>
-
-
-
-
-
-
+<br>
+<% if @similar_products.any? %>
+  <h2>Similar Products</h2>
+  <br>
+  <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
+  <% @product.similar_products.each do |similar_product|%>
+      <div class="card m-1" style="width: 18rem;">
+      <%= link_to product_similar_product_path(@product, similar_product), style:"text-decoration: none;" do %>
+      <% if similar_product.images.attached? %>
+        <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x250"%>
+      <% end %>
+      <div class="card-body">
+      <h5 class="card-title text-dark"><%= similar_product.name %></h5>
+      <div class="text-dark">
+      <strong>Price:</strong> &nbsp <%= number_to_currency(similar_product.price, unit: "₹", format: "%u %n") %><br>
+      <strong>Size:</strong> &nbsp <%= similar_product.size %>
+      </div>
+      <%= link_to "Show Product", product_similar_product_path(@product, similar_product), class:"btn btn-outline-success justify-content-center d-flex"%>
+      <% end %>
+      </div>
+  </div>
+  <% end %>
+  </div>
+<% end %>
 
 
 

@@ -1,0 +1,50 @@
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-5">
+            <div id="carouselExampleFade" class="carousel slide carousel-fade">
+              <div class="carousel-inner">
+               <% (0...@similar_product.images.count).each do |image| %>
+                <div class="carousel-item active">
+                <%= image_tag(@similar_product.images[1], class:"d-block w-100",size:"400x400") %>
+                </div>
+                <div class="carousel-item">
+                <%= image_tag(@similar_product.images[0],class:"d-block w-100",size:"400x400") %>
+                </div>
+                <div class="carousel-item">
+                <%= image_tag(@similar_product.images[2],class:"d-block w-100",size:"400x400") %>
+                </div>
+                <% end %>
+              </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+      </div>
+      <div class="col-md-5 style="font-size:21px;" ">
+        <h2><%= @similar_product.name %></h2><br>
+        <strong>Product Description:</strong> &nbsp <%= @similar_product.desc %><br>
+        <strong>Price:</strong> &nbsp <%= number_to_currency(@similar_product.price, unit: "₹", format: "%u %n") %><br>
+        <p><strong>Available Quantity:</strong> &nbsp <%= @similar_product.quantity %> items.</p><br>
+        </div>
+        <div class="col-md-2">
+            <%= render partial: 'sizes', locals: { sizes: @similar_product.product.sizes } %>
+            <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
+                <%= hidden_field_tag :similar_product_id, @similar_product.id %>
+                <%= hidden_field_tag :product_id, @product.id %>
+                <%= form.label :size_id %>
+                <%= form.collection_select :size_id, @similar_product.product.sizes, :id, :name %><br>
+                <div class="field">
+                <%= label_tag "Quantity" %>
+                <%= number_field_tag "quantity" %>
+                </div><br>
+                <%= button_to "Add to Cart", lineitems_path(similar_product_id: @similar_product,  product_id: @product.id), class: "btn btn-primary" %>
+            <% end %>
+     
+    </div>
+    </div>
+  </div>

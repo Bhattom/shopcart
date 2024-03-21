@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_20_084814) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_063456) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -73,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_084814) do
     t.integer "size_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_product_sizes_on_product_id"
+    t.index ["product_id"], name: "index_prod=uct_sizes_on_product_id"
     t.index ["size_id"], name: "index_product_sizes_on_size_id"
   end
 
@@ -98,6 +98,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_084814) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "similar_products", force: :cascade do |t|
+    t.string "name"
+    t.text "desc"
+    t.integer "price"
+    t.string "size"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "product_id"
+    t.index ["product_id"], name: "index_similar_products_on_product_id"
   end
 
   create_table "sizes", force: :cascade do |t|
@@ -137,5 +149,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_084814) do
   add_foreign_key "lineitems", "products"
   add_foreign_key "product_sizes", "products"
   add_foreign_key "product_sizes", "sizes"
+  add_foreign_key "similar_products", "products"
   add_foreign_key "sizes", "products"
 end
