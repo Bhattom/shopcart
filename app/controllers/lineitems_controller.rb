@@ -11,6 +11,7 @@ class LineitemsController < ApplicationController
    def show
     @lineitem = Lineitem.find(params[:id])
     @product = @lineitem.product
+    @size = Size.find(params[:id])
    end
 
    def new
@@ -23,9 +24,15 @@ class LineitemsController < ApplicationController
 
    def create
         product = Product.find(params[:product_id])
-        @lineitem = @cart.add_product(product, params[:quantity])
+        size = Size.find(params["lineitem"]["size_id"])
+        @lineitem = @cart.add_product(product, params[:quantity], params[:size_id])
         total_qty =  product.quantity - params[:quantity].to_i
         product.update(quantity: total_qty)
+        stock = size.stock_quantity - params[:quantity].to_i
+        size.update(stock_quantity: stock)
+        p stock
+        # hash = { "lineitem" => { "size_id" => "54" } }
+        # p hash["lineitem"]["size_id"] 
         update_qty = @lineitem.quantity.to_i + params[:quantiy].to_i
         @lineitem.update(quantity: update_qty)
         respond_to do |format|
@@ -46,7 +53,6 @@ class LineitemsController < ApplicationController
         add_qty = 0 if add_qty < 0
         p add_qty
         lineitem.product.update(quantity: add_qty)
-
         unit = lineitem.product.price.to_i * lineitem.quantity.to_i
         lineitem.update(unit_price: unit)
         p unit
@@ -65,7 +71,6 @@ class LineitemsController < ApplicationController
         add_qty = lineitem.product.quantity + 1
         p add_qty
         lineitem.product.update(quantity: add_qty)
-
         unit = lineitem.product.price.to_i * lineitem.quantity.to_i
         lineitem.update(unit_price: unit)
         p unit

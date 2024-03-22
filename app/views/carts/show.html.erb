@@ -20,7 +20,9 @@
         <div style="font-size:21px;">
           <h2><%= lineitem.product.name %></h2>
           <strong>Product Description:</strong> &nbsp <%= lineitem.product.desc %><br>
-          <strong>Size:</strong> &nbsp <%= lineitem.product.size %><br>
+          <% if lineitem.product.sizes.present? %>
+          <strong>Size:</strong> &nbsp <%= lineitem.product.sizes.name %><br>
+          <% end %>
           <div class="price_<%= lineitem.id %>"> <strong>Price:</strong> &nbsp  <%= number_to_currency(lineitem.unit_price, unit: "₹", format: "%u %n") %></div>
           <div class="quantity_<%= lineitem.id %>"><strong>Quantity:</strong> &nbsp <%= lineitem.quantity %></div>
         </div>

@@ -15,7 +15,6 @@
         <div class="card-body">
         <h5 class="card-title text-dark"><%= product.name %></h5>
         <div class="text-dark">
-        <strong>Size:</strong> &nbsp <%= product.size %><br>
         <strong>Price:</strong> &nbsp <%= number_to_currency(product.price, unit: "₹", format: "%u %n") %><br><br>
         </div>
         <%= link_to "Show Product", product_path(product), class:"btn btn-outline-success justify-content-center d-flex"%>

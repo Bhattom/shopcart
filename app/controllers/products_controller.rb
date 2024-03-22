@@ -9,6 +9,7 @@ class ProductsController < ApplicationController
     @products = Product.all
     @total_quantity = @product.quantity
     @similar_products = @product.similar_products
+    @size = Size.find(params[:id])
   end
 
   def edit
