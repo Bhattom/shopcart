@@ -44,14 +44,13 @@
     <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
         <%= hidden_field_tag :product_id, @product.id %>
         <div class="field">
-          <%= form.label :Size %>
-          <%= form.collection_select :size_id, @product.sizes, :id, :name %><br>
+        <%= form.label :Sizes %>
+        <%= form.collection_select :size_ids, @product.sizes, :id, :name, {}, { multiple: true } %><br>
           <%= label_tag "Quantity" %>
           <%= number_field_tag "quantity" %>
         </div><br>
-        <%= button_to "Add to Cart", lineitems_path(product_id: @product, size_id: @size), class: "btn btn-primary" %>
+        <%= form.submit "Add to Cart", class: "btn btn-primary" %>
       <% end %>
-     
     </div>
     </div>
   </div>

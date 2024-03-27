@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_22_051800) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_26_084419) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -57,6 +57,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_051800) do
     t.integer "subtotal", default: 0
   end
 
+  create_table "lineitem_sizes", force: :cascade do |t|
+    t.integer "lineitem_id", null: false
+    t.integer "size_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lineitem_id"], name: "index_lineitem_sizes_on_lineitem_id"
+    t.index ["size_id"], name: "index_lineitem_sizes_on_size_id"
+  end
+
   create_table "lineitems", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "cart_id", null: false
@@ -64,8 +73,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_051800) do
     t.datetime "updated_at", null: false
     t.integer "quantity"
     t.integer "unit_price"
+    t.integer "size_id"
     t.index ["cart_id"], name: "index_lineitems_on_cart_id"
     t.index ["product_id"], name: "index_lineitems_on_product_id"
+    t.index ["size_id"], name: "index_lineitems_on_size_id"
   end
 
   create_table "product_sizes", force: :cascade do |t|
@@ -144,8 +155,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_051800) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "lineitem_sizes", "lineitems"
+  add_foreign_key "lineitem_sizes", "sizes"
   add_foreign_key "lineitems", "carts"
   add_foreign_key "lineitems", "products"
+  add_foreign_key "lineitems", "sizes"
   add_foreign_key "product_sizes", "products"
   add_foreign_key "product_sizes", "sizes"
   add_foreign_key "similar_products", "products"

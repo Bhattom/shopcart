@@ -11,7 +11,6 @@ class LineitemsController < ApplicationController
    def show
     @lineitem = Lineitem.find(params[:id])
     @product = @lineitem.product
-    @size = Size.find(params[:id])
    end
 
    def new
@@ -24,17 +23,22 @@ class LineitemsController < ApplicationController
 
    def create
         product = Product.find(params[:product_id])
-        size = Size.find(params["lineitem"]["size_id"])
-        @lineitem = @cart.add_product(product, params[:quantity], params[:size_id])
+        lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
+        size_ids = params[:lineitem][:size_ids].reject(&:empty?)
+        quantity = params[:quantity].to_i
+        size_id = params[:size_ids].to_i
+        size_ids.each do |size_id|
+            @lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
+            if @lineitem.present?
+              @lineitem = @cart.add_product(product, quantity, size_id)
+            else
+             @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids])
+            end
+
+          end
         total_qty =  product.quantity - params[:quantity].to_i
         product.update(quantity: total_qty)
-        stock = size.stock_quantity - params[:quantity].to_i
-        size.update(stock_quantity: stock)
-        p stock
-        # hash = { "lineitem" => { "size_id" => "54" } }
-        # p hash["lineitem"]["size_id"] 
-        update_qty = @lineitem.quantity.to_i + params[:quantiy].to_i
-        @lineitem.update(quantity: update_qty)
+       
         respond_to do |format|
             if @lineitem.save
                 format.html { redirect_to @lineitem.cart, notice: "Item Added to cart" }
@@ -53,6 +57,10 @@ class LineitemsController < ApplicationController
         add_qty = 0 if add_qty < 0
         p add_qty
         lineitem.product.update(quantity: add_qty)
+        size = lineitem.sizes # Assuming there's a size associated with the line item
+        if size
+            size.update(stock_quantity: size.stock_quantity - 1)
+        end
         unit = lineitem.product.price.to_i * lineitem.quantity.to_i
         lineitem.update(unit_price: unit)
         p unit
@@ -71,6 +79,8 @@ class LineitemsController < ApplicationController
         add_qty = lineitem.product.quantity + 1
         p add_qty
         lineitem.product.update(quantity: add_qty)
+        add_stk = lineitem.sizes.stock_quantity + 1
+        lineitem.sizes.update(stock_quantity: add_stk)
         unit = lineitem.product.price.to_i * lineitem.quantity.to_i
         lineitem.update(unit_price: unit)
         p unit

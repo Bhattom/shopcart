@@ -1,7 +1,8 @@
 class Lineitem < ApplicationRecord
   belongs_to :product
   belongs_to :cart
-  belongs_to :size
+  has_many :lineitem_sizes
+  has_many :sizes, through: :lineitem_sizes
 
 
   def unit_price
