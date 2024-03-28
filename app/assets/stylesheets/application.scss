@@ -102,3 +102,26 @@
 a{
     text-decoration: none;
 }
+
+.size-buttons {
+  display: flex;
+}
+
+.size-button {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.size-button.btn {
+  color: #6faef3;
+  background-color: #ffffff;
+  border-color: #b8c0c5;
+}
+
+.size-button:hover {
+  color: #495057;
+  background-color: lightgray;
+  border-color: blue;
+}

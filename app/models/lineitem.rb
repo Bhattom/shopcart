@@ -12,5 +12,5 @@ class Lineitem < ApplicationRecord
   def total_quantity
     product.quantity.to_i - quantity.to_i
   end
-
+  
 end

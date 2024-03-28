@@ -44,13 +44,21 @@
     <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
         <%= hidden_field_tag :product_id, @product.id %>
         <div class="field">
-        <%= form.label :Sizes %>
-        <%= form.collection_select :size_ids, @product.sizes, :id, :name, {}, { multiple: true } %><br>
+          <strong>Sizes:<strong>
+          <div class="size-buttons">
+          <% @product.sizes.each do |size| %>
+            <button class="size-button" type="button" data-size-id="<%= size.id %>">
+              <%= size.abbreviation %>
+            </button>
+          <% end %>
+          </div>
+          <%= hidden_field_tag :size_ids, nil, id: "size_ids" %>
+        </div>
           <%= label_tag "Quantity" %>
-          <%= number_field_tag "quantity" %>
+          <%= number_field_tag "quantity" %><br><br>
+          <%= form.submit "Add to Cart", class: "btn btn-primary" %>
         </div><br>
-        <%= form.submit "Add to Cart", class: "btn btn-primary" %>
-      <% end %>
+    <% end %>
     </div>
     </div>
   </div>
@@ -93,7 +101,16 @@
   </div>
 <% end %>
 
-
+<script>
+  $(document).ready(function() {
+    $('.size-button').click(function() {
+      // Get the size ID from the data attribute
+      var sizeId = $(this).data('size-id');
+      // Set the value of the hidden input field for size_ids
+      $('#size_ids').val(sizeId);
+    });
+  });
+</script>
 
 
 

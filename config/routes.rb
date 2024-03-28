@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   resources :lineitems do
     patch 'increase_quantity', on: :member
     patch 'decrease_quantity', on: :member
+    patch 'increase_stk', on: :member
+    patch 'decrease_stk', on: :member
   end
   devise_for :users
   root to: "products#index"
