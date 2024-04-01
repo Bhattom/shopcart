@@ -47,7 +47,7 @@
           <strong>Sizes:<strong>
           <div class="size-buttons">
           <% @product.sizes.each do |size| %>
-            <button class="size-button" type="button" data-size-id="<%= size.id %>">
+            <button class="size-button" id="size_<%= size.id %>" type="button" data-size-id="<%= size.id %>">
               <%= size.abbreviation %>
             </button>
           <% end %>

@@ -14,21 +14,28 @@
 <div class="container mt-5">
     <div class="row">
       <div class="col-md-3">
-         <%= image_tag lineitem.product.images.first, size:"200x200"%><br>
+         <%= image_tag lineitem.product.images.first, size:"210x210"%><br>
       </div>
       <div class="col-md-6">
         <div style="font-size:21px;">
           <h2><%= lineitem.product.name %></h2>
           <strong>Product Description:</strong> &nbsp <%= lineitem.product.desc %><br>
-          <strong> Sizes:</strong>&nbsp <%= lineitem.sizes.pluck(:abbreviation).join(', ') %><br>
-          <div class="stk">
-          <strong> SQ:</strong> &nbsp 
+          <strong> Sizes:</strong>&nbsp
+          <div class="size-buttons">
+          <% lineitem.sizes.each do |size| %> 
+            <button class="size-button" type="button" id="size_<%= size.id %>" data-size-id="<%= size.id %>">
+            <%= size.abbreviation %><br>
+          <% end %>
+          </button>
+          </div>
+          <div class="qty">
+          <strong>Quantity: </strong> &nbsp 
           <% lineitem.lineitem_sizes.each do |ls| %>
-           <%= ls.size.stock_quantity %>
+            <%= ls.quantity %>
           <% end %>
           </div>
           <div class="d-flex grid gap-4">
-          <%= link_to increase_stk_lineitem_path(lineitem), method: :patch,remote: true, class:"increase-stk "  do %>
+          <%= link_to increase_stk_lineitem_path(lineitem), method: :patch,remote: true,class:"increase-stk "  do %>
             <%= image_tag "https://cdn-icons-png.flaticon.com/128/9293/9293648.png",size:"35x35", alt: "Logo" %>
           <% end %>
           <%= link_to decrease_stk_lineitem_path(lineitem), method: :patch,remote: true, class:"decrease-stk " do %>
@@ -36,7 +43,7 @@
           <% end %>
           </div>
           <div class="price_<%= lineitem.id %>"> <strong>Price:</strong> &nbsp  <%= number_to_currency(lineitem.unit_price, unit: "₹", format: "%u %n") %></div>
-          <div class="quantity_<%= lineitem.id %>"><strong>Quantity:</strong> &nbsp <%= lineitem.quantity %></div>
+          
         </div>
       </div>   
       <div class="col-md-3 mt-2 d-flex justify-content-around align-items-center">
@@ -75,25 +82,44 @@
               });
               $('.increase-stk').click(function(event) {
                 event.preventDefault();
+                var sizeId = $('.size-button').data('size-id');
+                var lineitem_id = $(this).data('lineitem_id');
+                if(sizeId){
                 $.ajax({
                     url: '/lineitems/increase_stk',
                    method: 'PATCH', 
                    dataType: 'script',
+                   data: { size_id: sizeId,
+                   id: lineitem_id },
                   success: function(response) {
                     console.log(' Stock Quantity increased successfully');
+                    console.log(sizeId);
                    }
                 });
+              }
+            else{
+              console.error('size_id is missing or invalid');
+            }
               });
               $('.decrease-stk').click(function(event) {
                 event.preventDefault();
+                var sizeId = $('.size-button').data('size-id');
+                var lineitem_id = $(this).data('lineitem_id');
+                if(sizeId){
                 $.ajax({
                     url: '/lineitems/decrease_stk',
                    method: 'PATCH', 
                    dataType: 'script',
+                   data: { size_id: sizeId,
+                  id: lineitem_id },
                   success: function(response) {
                     console.log(' Stock Quantity decreased successfully');
                    }
                 });
+                  }
+              else{
+                console.error('size_id is missing or invalid');
+              }
               });
               $('.decrease-quantity').click(function(event) {
                 event.preventDefault();

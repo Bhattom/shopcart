@@ -1,6 +1,4 @@
-$('.stk').html("<strong>SQ:</strong>&nbsp<%= @lineitem.lineitem_sizes.stock_quantity %>"
-
-# $('.stk').empty(); // Clear previous content
-# <% @lineitem.lineitem_sizes.each do |lineitem_size| %>
-#   $('.stk').append("<strong>SQ:</strong>&nbsp<%= lineitem_size.size.stock_quantity %>");
-# <% end %>
+# $('.stk').html("<strong>SQ:</strong>&nbsp<%= @lineitem.quantity %>"
+<% @lineitem.lineitem_sizes.each do |ls| %>
+  $('.qty').html("<strong>Quantity:</strong>&nbsp<%= ls.quantity %>");
+<% end %>

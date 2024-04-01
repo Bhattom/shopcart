@@ -23,22 +23,17 @@ class LineitemsController < ApplicationController
 
    def create
         product = Product.find(params[:product_id])
-        lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
-        # size_ids = params[:lineitem][:size_ids].reject(&:empty?)
-        # size_ids = params[:size_ids].presence || []
-        size_ids = params[:size_ids].split(',') if params[:size_ids].present?
-        quantity = params[:quantity].to_i
-        size_id = params[:size_ids].to_i
+        size_ids = Array(params[:size_ids]).map(&:to_i)
         size_ids.each do |size_id|
-            @lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
-            if @lineitem.present?
-              @lineitem = @cart.add_product(product, quantity, size_id)
-              @lineitem.sizes << Size.find(size_id)
-              @lineitem.save
+        lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
+        quantity = params[:quantity].to_i
+            if lineitem.present?
+              lineitem = @cart.add_product(product, quantity, size_id)
+              lineitem.size << Size.find(size_id)
+              l.save
             else
              @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids])
             end
-
         end
         total_qty =  product.quantity - params[:quantity].to_i
         product.update(quantity: total_qty)
@@ -93,13 +88,14 @@ class LineitemsController < ApplicationController
       def increase_stk
         lineitem = Lineitem.find(params[:id])
         @cart = lineitem.cart
-        lineitem.increment!(:quantity)
-        lineitem.lineitem_sizes.each do |ls|
-        add_qty = ls.size.stock_quantity - 1
-        p add_qty
-        ls.size.update(stock_quantity: add_qty)
+        # lineitem.increment!(:quantity)
+        lineitem_size = lineitem.lineitem_sizes.find_by(lineitem_id: lineitem)
+        lineitem_size.increment!(:quantity)
+        if lineitem_size.present?
+            add_qty = lineitem_size.size.stock_quantity - 1
+            lineitem_size.size.update(stock_quantity: add_qty)
         end
-        unit = lineitem.product.price.to_i * lineitem.quantity.to_i
+        unit = lineitem.product.price.to_i * lineitem_size.quantity.to_i
         lineitem.update(unit_price: unit)
         p unit
 
@@ -114,10 +110,12 @@ class LineitemsController < ApplicationController
         lineitem = Lineitem.find(params[:id])
         @cart = lineitem.cart
         lineitem.decrement!(:quantity)
-        lineitem.lineitem_sizes.each do |ls|
-        add_qty = ls.size.stock_quantity + 1
+        size_id = params[:sizeId]
+        lineitem_size = lineitem.lineitem_sizes.find_by(size_id: sizeId)
+        lineitem.size_ids.each do |ls|
+        add_qty = ls.lineitem_size.quantity + 1
         p add_qty
-        ls.size.update(stock_quantity: add_qty)
+        ls.update(quantity: add_qty)
         end
         unit = lineitem.product.price.to_i * lineitem.quantity.to_i
         lineitem.update(unit_price: unit)
