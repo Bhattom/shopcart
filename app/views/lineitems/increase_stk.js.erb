@@ -1,4 +1,1 @@
-# $('.stk').html("<strong>SQ:</strong>&nbsp<%= @lineitem.quantity %>"
-<% @lineitem.lineitem_sizes.each do |ls| %>
-  $('.qty').html("<strong>Quantity:</strong>&nbsp<%= ls.quantity %>");
-<% end %>
+$('.qty').html("<strong>Quantity:&nbsp</strong> <%= j @lineitem.lineitem_sizes.quantity %>");

@@ -121,13 +121,21 @@ a{
   border: 20px solid;
 }
 
-.size-button:hover {
+.size-button:hover:active {
   color: #495057;
-  background-color: lightgray;
   border-color: rgb(17, 17, 238);
   shape-outside: margin-box;
+  background-color: blue;
 }
 
 .size-button:active {
   color: blue;
+}
+
+.submit-button {
+  background-color: rgb(239, 223, 223); 
+}
+
+.submit-button:active {
+  background-color: blue;
 }
