@@ -1,0 +1,45 @@
+<html>
+<body>
+<h2> Your Order </h2>
+<div class="d-flex justify-content-end">       
+   <%= link_to 'Cancle Order', orders_path , class:"btn btn-outline-success btn-lg" %>
+</div>
+<hr/>
+<div class="d-flex justify-content-end subtotal">
+  <h4><strong>Cart Total: </strong><%= number_to_currency(@cart.subtotal, unit: "₹", format: "%u %n") %></h4>
+</div>
+<% @cart.lineitems.each do |lineitem| %>
+
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-3">
+         <%= image_tag lineitem.product.images.first, size:"210x210"%><br>
+      </div>
+      <div class="col-md-6">
+        <div style="font-size:21px;">
+          <h2><%= lineitem.product.name %></h2>
+          <strong>Product Description:</strong> &nbsp <%= lineitem.product.desc %><br>
+          <strong> Sizes:</strong>&nbsp
+          <% lineitem.sizes.each do |size| %> 
+            <%= size.abbreviation %><br>
+          <% end %>
+          <div class="qty">
+          <strong>Quantity: </strong> &nbsp 
+            <%= lineitem.lineitem_sizes.pluck(:quantity).join(',') %>
+          </div>
+          <div class="price_<%= lineitem.id %>"> <strong>Price:</strong> &nbsp  <%= number_to_currency(lineitem.unit_price, unit: "₹", format: "%u %n") %></div>
+          
+        </div>
+      </div>   
+      <div class="col-md-3 mt-2 d-flex justify-content-around align-items-center">
+        <%= link_to remove_item_cart_path(lineitem), method: :delete, data: { confirm: "Are you sure?" },remote: true  do %>
+          <%= image_tag "https://cdn-icons-png.flaticon.com/128/1/1570.png",size:"35x35", alt: "Logo" %>
+        <% end %>
+      </div>
+      </div>
+      <br>
+      <hr>
+</div>
+<% end %>
+</body>
+</html>

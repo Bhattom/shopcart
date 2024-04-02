@@ -1,1 +1,5 @@
-$('.qty').html("<strong>Quantity:&nbsp</strong> <%= j @lineitem.lineitem_sizes.quantity %>");
+<% quantities = @lineitem.lineitem_sizes.pluck(:quantity) %>
+<% p quantities %>
+<% if quantities.any? %>
+  $('.qty').html("<strong>Quantity:&nbsp</strong> <%= j quantities.join(', ') %>");
+<% end %>

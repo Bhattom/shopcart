@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     patch 'increase_stk', on: :member
     patch 'decrease_stk', on: :member
   end
+  resources :orders
   devise_for :users
   root to: "products#index"
   resources :users do
