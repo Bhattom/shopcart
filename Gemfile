@@ -84,3 +84,7 @@ gem "kaminari"
 gem "image_processing", "~> 1.2"
 
 gem "turbolinks", "~> 5.2"
+
+gem 'stripe'
+
+gem "razorpay", "~> 3.2"

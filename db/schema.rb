@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_113319) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_05_040023) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,6 +45,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_113319) do
     t.string "name"
     t.string "email"
     t.integer "phone_no"
+    t.text "address"
+    t.integer "user_id"
+    t.integer "pincode"
+    t.string "city"
+    t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
   create_table "admins", force: :cascade do |t|
@@ -93,8 +98,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_113319) do
     t.integer "cart_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "total"
     t.index ["cart_id"], name: "index_orders_on_cart_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "amount"
+    t.string "name"
+    t.integer "contact"
+    t.string "email"
+    t.integer "order_id"
+    t.index ["order_id"], name: "index_payments_on_order_id"
   end
 
   create_table "product_sizes", force: :cascade do |t|
@@ -173,6 +190,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_113319) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addresses", "users"
   add_foreign_key "lineitem_sizes", "lineitems"
   add_foreign_key "lineitem_sizes", "sizes"
   add_foreign_key "lineitems", "carts"
@@ -180,6 +198,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_113319) do
   add_foreign_key "lineitems", "sizes"
   add_foreign_key "orders", "carts"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
   add_foreign_key "product_sizes", "products"
   add_foreign_key "product_sizes", "sizes"
   add_foreign_key "similar_products", "products"

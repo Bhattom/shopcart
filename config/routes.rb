@@ -17,8 +17,17 @@ Rails.application.routes.draw do
     patch 'decrease_stk', on: :member
   end
   resources :orders
+  resources :addresses
   devise_for :users
   root to: "products#index"
+  resources :payments, only: [:create, :show, :new] do
+    collection do
+      post 'create_payment'
+      post 'payment_callback'
+    end
+  end
+  
+  resources :razorpay, only: [:create_payment, :payment_callback]
   resources :users do
      collection do
        get 'user'

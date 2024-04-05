@@ -1,9 +1,15 @@
 <html>
 <body>
+<div class="d-flex justify-content-center" style="font-size:21px;">
+    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", '#' ,style:"text-decoration: none;",class:"text-dark" %>  
+</div>
 <h2> Your Cart </h2>
+<%= form_with(model: Order.new, url: orders_path, method: :post) do |form| %>
+  <%= hidden_field_tag :cart_id, @cart.id %>
+  <%= hidden_field_tag :user_id, current_user.id %>
 <div class="d-flex justify-content-end">       
    <%= link_to 'Continue Shopping', products_path, class:"btn btn-outline-success btn-lg" %>&nbsp &nbsp
-   <%= link_to 'Place Order', orders_path , class:"btn btn-outline-success btn-lg" %>
+   <%= form.submit 'Place Order', class:"btn btn-outline-success btn-lg" %>
 </div>
 <hr/>
 <div class="d-flex justify-content-end subtotal">
@@ -61,6 +67,7 @@
       <br>
       <hr>
 </div>
+<% end %>
 <% end %>
 </body>
 </html>

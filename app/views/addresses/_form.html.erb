@@ -1,0 +1,149 @@
+<div class="d-flex justify-content-center" style="font-size:21px;">
+    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", create_payment_payments_path ,style:"text-decoration: none;",class:"text-dark" %>  
+</div>
+<br>
+<div class="d-flex justify-content-center">
+<h5><strong> Use This Addresses:&nbsp</strong></h5>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
+                <table class="table table-bordered text-center">
+                <tr>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th> Pincode </th>
+                </tr>
+                <% current_user.addresses.each do |address| %> 
+                <tr>
+                <td>
+                <%= link_to '#',class:"text-dark", style:"text-decoration: none;" do %>
+                    <%= address.address %>
+                <% end %>
+                </td>
+                <td>
+                    <%= address.city %>
+                </td>
+                <td>
+                    <%= address.pincode %><br>
+                </td>
+                </tr>
+                <% end %>
+                </table>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <h5><strong> Add New Address:&nbsp</strong></h5>
+        </div>        
+        <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg mx-auto">
+            <div class="card my-5 shadow">
+                <div class="card-body">
+                <div class="row">
+                    <%= form_with(model: @address, local: true) do |form| %>
+                        <%= hidden_field_tag :user_id, current_user.id %>  
+                <div class="row">
+                <div class="field col-12 mt-4">
+                    <% invalid = @address.errors.include?(:email) %>
+                    <div class="form-group">
+                    <%=form.label :Email%>
+                    <%= form.text_field :email, class: "form-control #{'is-invalid' if invalid}", placeholder: 'email',value: current_user.email%>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:email).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="field col-12 mt-4">
+                    <% invalid = @address.errors.include?(:name) %>
+                    <div class="form-group">
+                    <%=form.label :Name%>
+                    <%= form.text_field :name, class: "form-control #{'is-invalid' if invalid}", placeholder: 'name' %>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:name).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="field col-12 mt-4">
+                <% invalid = @address.errors.include?(:phone_no) %>
+                <div class="form-group">
+                    <%=form.label :Phone%>
+                    <%= form.text_field :phone_no, class: "form-control #{'is-invalid' if invalid}", placeholder: 'Phone' %>
+                    <% if invalid %>
+                    <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:phone_no).each do |error_message| %>
+                        <%= error_message %>.
+                        <% end %>
+                    </div>
+                    <% end %>
+                </div>
+                </div>
+                <div class="field col-12 mt-4">
+                    <% invalid = @address.errors.include?(:address) %>
+                    <div class="form-group">
+                    <%=form.label :Address%>
+                    <%= form.text_area :address, class: "form-control #{'is-invalid' if invalid}", placeholder: 'address' %>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:address).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="field col-6 mt-4">
+                    <% invalid = @address.errors.include?(:pincode) %>
+                    <div class="form-group">
+                    <%=form.label :Pincode%>
+                    <%= form.number_field :pincode, class: "form-control #{'is-invalid' if invalid}", placeholder: 'pincode' %>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:pincode).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="field col-6 mt-4">
+                    <% invalid = @address.errors.include?(:city) %>
+                    <div class="form-group">
+                    <%=form.label :City%>
+                    <%= form.text_field :city, class: "form-control #{'is-invalid' if invalid}", placeholder: 'City Name' %>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:city).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <div class="actions">
+                    <%= form.submit %>  
+                    </div>
+                </div>
+                <% end %>   
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>

@@ -12,6 +12,18 @@ class OrdersController < ApplicationController
     end
 
     def create
+        cart = Cart.find(params[:cart_id])
+        user = User.find(params[:user_id])
+        @order = Order.new(cart: cart, user: user, total: cart.subtotal)
+        respond_to do |format|
+            if @order.save!
+                format.html { redirect_to orders_path, notice: "Order Sucessfully Created!!!!" }
+                format.json { render :show, status: :created, location: @order }
+            else
+                format.html { render :new }
+                format.json { render json: @order.errors, status: :unprocessable_entity }
+            end
+        end
     end
 
     def edit
@@ -26,6 +38,6 @@ class OrdersController < ApplicationController
     private
 
     def order_params
-    params.require(:order).permit(:id, :cart_id, :user_id)
+      params.require(:order).permit(:id, :cart_id, :user_id)
     end
 end
