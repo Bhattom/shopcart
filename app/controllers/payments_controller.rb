@@ -4,24 +4,28 @@ class PaymentsController < ApplicationController
     end
     def create
        
-        Razorpay.setup('rzp_test_19lBvfFkhLkl5R', 'wWw5FBQUfWvAFNXLqAPUKX8U')
+        Razorpay.setup('rzp_test_DeXPCIrBNCQc32', 'lY9cRXuTNcryb4nebgR17BSF')
     
-        razorpay_order = Razorpay::Order.create(amount: 250000, currency: 'INR', receipt: 'Test')
+        cart_subtotal = current_user.cart.lineitems.sum(:price)
+
+        razorpay_order = Razorpay::Order.create(amount: cart_subtotal, currency: 'INR', receipt: 'Test')
+
     
         Rails.logger.info("Razorpay order created successfully: #{razorpay_order.inspect}")
-    
-        render :new
+        
+        redirect_to razorpay_order_path(razorpay_order.id)
       end
 
       def create_payment
-        Razorpay.setup('rzp_test_19lBvfFkhLkl5R', 'wWw5FBQUfWvAFNXLqAPUKX8U')
-        razorpay_order = Razorpay::Order.create(amount: 25000, currency: 'INR', receipt: 'TEST1')
+        Razorpay.setup('rzp_test_DeXPCIrBNCQc32', 'lY9cRXuTNcryb4nebgR17BSF')
+        cart_subtotal = @cart.subtotal
+        razorpay_order = Razorpay::Order.create(amount: cart_subtotal, currency: 'INR', receipt: 'TEST1')
         Rails.logger.info("Razorpay order created successfully: #{razorpay_order.inspect}")
         payment_link = "#{request.base_url}/payments/#{razorpay_order.id}" 
         p payment_link
         p 'wwwww'
         p 'wwwww'
-        render json: { payment_link: payment_link }
+        redirect_to create_payment_payments_path(razorpay_order.id)
       end
 
     def payment_callback

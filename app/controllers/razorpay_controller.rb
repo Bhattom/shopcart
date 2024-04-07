@@ -1,6 +1,7 @@
 class RazorpayController < ApplicationController
     def create_payment
-      razorpay_order = Razorpay::Order.create(amount: 25000, currency: 'INR', receipt: 'TEST1')
+        cart_subtotal = current_user.cart.lineitems.sum(:price)
+        razorpay_order = Razorpay::Order.create(amount: cart_subtotal, currency: 'INR', receipt: 'Test')
       payment_link = "#{request.base_url}/payments/#{razorpay_order.id}" 
 
       render json: { payment_link: payment_link }

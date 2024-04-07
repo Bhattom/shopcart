@@ -26,6 +26,14 @@ class OrdersController < ApplicationController
         end
     end
 
+    def razorpay_order_id
+        order = Order.find(params[:id])
+        razorpay_order_id = generate_razorpay_order_id(order)
+        render json: { razorpay_order_id: razorpay_order_id }
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Order not found' }, status: :not_found
+      end
+
     def edit
     end
 

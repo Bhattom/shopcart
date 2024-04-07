@@ -1,41 +1,72 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
+            <% if @cart.lineitems.any? %>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @cart.lineitems.each do |item| %>
+                    <tr>
+                      <td><%= item.product.name %></td>
+                      <td><%= item.product.price %></td>
+                      <td><%= item.quantity %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <p>Cart is empty</p>
+            <% end %>
+          </div>
+          <strong class="d-flex justify-content-end"> Total Amount:&nbsp<%= @cart.subtotal %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <button id="rzp-button1">Pay with Razorpay</button>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-var options = {
-    "key": "rzp_test_19lBvfFkhLkl5R",
-    "amount": "50000",
-    "currency": "INR",
-    "name": "Shopcart",
-    "description": "Test Transaction",
-    "order_id": "order_NuvI7bPWbP95uk",
-    "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
-    },
-    "prefill": {
-        "name": "Om Bhatt",
-        "email": "ombhatt2310@gmail.com",
-        "contact": "7490933937"
-    },
-    "notes": {
-        "address": "Bhakti Circle Nikol, Ahmedabad"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-});
 document.getElementById('rzp-button1').onclick = function(e){
+    // Extract the order ID from the data attribute of the button
+    var orderId = this.getAttribute('data-order-id');
+    // Assuming you have the actual amount available in a variable named cartAmount
+    var cartAmount = <%= @cart.subtotal %>;
+
+    var options = {
+        "key": "rzp_test_DeXPCIrBNCQc32",
+        "amount": cartAmount,
+        "currency": "INR",
+        "name": "Shopcart",
+        "description": "Test Transaction",
+        "order_id": orderId,
+        "handler": function (response){
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature)
+        },
+        "prefill": {
+            "name": "Om Bhatt",
+            "email": "ombhatt2310@gmail.com",
+            "contact": "7490933937"
+        },
+        "notes": {
+            "address": "Bhakti Circle Nikol, Ahmedabad"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
     rzp1.open();
     e.preventDefault();
 }

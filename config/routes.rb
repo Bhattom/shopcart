@@ -26,7 +26,8 @@ Rails.application.routes.draw do
       post 'payment_callback'
     end
   end
-  
+  post '/payments/create_payment/:order_id', to: 'payments#create_payment', as: 'create_payment'
+
   resources :razorpay, only: [:create_payment, :payment_callback]
   resources :users do
      collection do
