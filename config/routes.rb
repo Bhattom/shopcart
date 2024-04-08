@@ -24,10 +24,11 @@ Rails.application.routes.draw do
     collection do
       post 'create_payment'
       post 'payment_callback'
+      get '/success', to: 'payments#success', as: 'success'
+
     end
   end
   post '/payments/create_payment/:order_id', to: 'payments#create_payment', as: 'create_payment'
-
   resources :razorpay, only: [:create_payment, :payment_callback]
   resources :users do
      collection do

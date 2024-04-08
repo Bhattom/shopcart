@@ -30,7 +30,7 @@ class LineitemsController < ApplicationController
             if lineitem.present?
               lineitem = @cart.add_product(product, quantity, size_id)
               lineitem.size << Size.find(size_id)
-              l.save
+              lineitem.save
             else
              @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids])
             end
