@@ -1,0 +1,16 @@
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4  justify-content-center">
+    <% @categories.each do |category|%>
+        <div class="card m-1" style="width: 25rem; height: 34rem;">
+        <%= link_to products_path(category_id: category.id), style:"text-decoration: none;" do %>
+        <% if category.images.attached? %>
+          <%= image_tag category.images.first, class:"card-img-top", size:"350x350"%>
+        <% end %>
+        <div class="card-body">
+        <h5 class="card-title text-dark"><%= category.name %></h5>
+        <h5 class="card-title text-dark"><%= category.desc %></h5>
+        <%= link_to "Show Products", category_path(category), class:"btn btn-outline-success justify-content-center d-flex"%>
+        <% end %>
+        </div>
+    </div>
+    <% end %>
+    </div>

@@ -1,0 +1,31 @@
+<h1><%= @category.name %></h1>
+<% if @category.products.present? %>
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4 justify-content-center">
+    <% @category.products.each do |product| %>
+      <div class="card m-1" style="width: 25rem; height: 34rem;">
+        <%= link_to product_path(product), style: "text-decoration: none;" do %>
+          <% if product.images.attached? %>
+            <%= image_tag product.images.first, class: "card-img-top", size: "350x350" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title text-dark"><%= product.name %></h5>
+            <div class="text-dark">
+              <strong>Price:</strong> &nbsp <%= number_to_currency(product.price, unit: "₹", format: "%u %n") %><br><br>
+            </div>
+            <%= link_to "Show Product", product_path(product), class: "btn btn-outline-success justify-content-center d-flex" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+<div class="card m-1" style="width: 25rem;">
+<% if @category.images.attached? %>
+  <%= image_tag @category.images.first, class: "card-img-top", size: "350x350" %>
+<% end %>
+<div class="card-body">
+  <h5 class="card-title text-dark"><%= @category.desc %></h5>
+</div>
+</div>
+</div>
+<% end %>

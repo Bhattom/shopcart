@@ -20,7 +20,7 @@
                 <% current_user.addresses.each do |address| %> 
                 <tr>
                 <td>
-                <%= link_to '#',class:"text-dark", style:"text-decoration: none;" do %>
+                <%= link_to new_payment_path(address) ,class:"text-dark", style:"text-decoration: none;" do %>
                     <%= address.address %>
                 <% end %>
                 </td>

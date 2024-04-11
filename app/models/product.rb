@@ -4,6 +4,7 @@ class Product < ApplicationRecord
     has_many :lineitems
     has_many_attached :images
     has_many :similar_products
+    has_and_belongs_to_many :categories
     
 
     validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -15,6 +16,15 @@ class Product < ApplicationRecord
             throw :abort
         end
     end
+
+    def self.ransackable_attributes(_auth_object)
+        ["name"]
+      end
+  
+      def self.ransackable_associations(auth_object = nil)
+        []
+      end 
+  
 
     
 

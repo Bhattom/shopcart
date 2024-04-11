@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.all
+    @categories = Category.all
+    @products = @category ? @category.products : Product.all
   end
 
   def show
@@ -18,10 +20,12 @@ class ProductsController < ApplicationController
 
   def new
     @product = Product.new
+
   end
 
   def create
     @product = Product.new(product_params)
+    @product.category_ids = params[:product][:category_id]
     if @product.save
         redirect_to @product
     else
@@ -51,9 +55,27 @@ class ProductsController < ApplicationController
     current_cart.add_item(@product, quantity)
     redirect_to cart_path(current_cart), notice: "Added #{quantity} #{'item'.pluralize(quantity)} to cart."
   end
+
+  def filtered
+    @category = Category.find_by(name: params[:category])
+    if @category
+      @products = @category.products
+    else
+      redirect_to products_path, alert: "Category not found"
+    end
+  end
+
+  def product
+    @category = Category.find_by(id: params[:category])
+    if @category
+      @products = @category.products if @category.present?
+    else
+      @products = Product.all
+    end
+  end
   private
 
   def product_params
-    params.require(:product).permit(:name, :desc, :price, :size, :quantity, images: [])
+    params.require(:product).permit(:name, :desc, :price, :size, :quantity, :id, images: [])
   end
 end

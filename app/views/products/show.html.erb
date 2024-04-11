@@ -1,123 +1,126 @@
- 
-    <div class="d-flex justify-content-end">
+<div class="d-flex justify-content-end">
      
-      <%= link_to products_path do %>
-       <%= image_tag "back-button.png",size:"60x60", alt: "Logo" %>
-      <% end %>
-    </div>
- <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-5">
-            <div id="carouselExampleFade" class="carousel slide carousel-fade">
-              <div class="carousel-inner">
-               <% (0...@product.images.count).each do |image| %>
-                <div class="carousel-item active">
-                <%= image_tag(@product.images[1], class:"d-block w-100",size:"400x400") %>
+<%= link_to products_path do %>
+ <%= image_tag "back-button.png",size:"60x60", alt: "Logo" %>
+<% end %>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-3 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
+          <div class="d-flex justify-content-center">         
+          <div class="container mt-3 backroung-light">
+          <div class="row">
+          <div class="col-md-5">
+                <div id="carouselExampleFade" class="carousel slide carousel-fade">
+                  <div class="carousel-inner">
+                   <% (0...@product.images.count).each do |image| %>
+                    <div class="carousel-item active">
+                    <%= image_tag(@product.images[1], class:"d-block w-100",size:"400x400") %>
+                    </div>
+                    <div class="carousel-item">
+                    <%= image_tag(@product.images[0],class:"d-block w-100",size:"400x400") %>
+                    </div>
+                    <div class="carousel-item">
+                    <%= image_tag(@product.images[2],class:"d-block w-100",size:"400x400") %>
+                    </div>
+                    <% end %>
+                  </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <div class="carousel-item">
-                <%= image_tag(@product.images[0],class:"d-block w-100",size:"400x400") %>
-                </div>
-                <div class="carousel-item">
-                <%= image_tag(@product.images[2],class:"d-block w-100",size:"400x400") %>
-                </div>
-                <% end %>
-              </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+          </div>
+          <div class="col-md-4 style="font-size:21px;" ">
+            <h2><%= @product.name %></h2><br>
+            <strong>Product Description:</strong> &nbsp <%= @product.desc %><br>
+            <strong>Sizes:</strong> &nbsp <%= @product.sizes.pluck(:name).join(', ') %><br>
+            <strong>Price:</strong> &nbsp <%= number_to_currency(@product.price, unit: "₹", format: "%u %n") %><br>
+            <p><strong>Available Quantity:</strong> &nbsp <%= @total_quantity %> items.</p><br>
             </div>
-      </div>
-      <div class="col-md-5 style="font-size:21px;" ">
-        <h2><%= @product.name %></h2><br>
-        <strong>Product Description:</strong> &nbsp <%= @product.desc %><br>
-        <strong>Sizes:</strong> &nbsp <%= @product.sizes.pluck(:name).join(', ') %><br>
-        <strong>Price:</strong> &nbsp <%= number_to_currency(@product.price, unit: "₹", format: "%u %n") %><br>
-        <p><strong>Available Quantity:</strong> &nbsp <%= @total_quantity %> items.</p><br>
-        </div>
-      <div class="col-md-2">
-    <%= render partial: 'sizes', locals: { sizes: @product.sizes } %>
-    <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
-        <%= hidden_field_tag :product_id, @product.id %>
-        <div class="field">
-          <strong>Sizes:<strong>
-          <div class="size-buttons">
-          <% @product.sizes.each do |size| %>
-            <button class="size-button" id="size_<%= size.id %>" type="button" data-size-id="<%= size.id %>">
-              <%= size.abbreviation %>
-            </button>
+          <div class="col-md-3">
+          <%= render partial: 'sizes', locals: { sizes: @product.sizes } %>
+          <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
+            <%= hidden_field_tag :product_id, @product.id %>
+            <%= hidden_field_tag :user_id, current_user.id %>
+            <div class="field">
+              <strong>Sizes:<strong>
+              <div class="size-buttons">
+              <% @product.sizes.each do |size| %>
+                <button class="size-button" id="size_<%= size.id %>" type="button" data-size-id="<%= size.id %>">
+                  <%= size.abbreviation %>
+                </button>
+              <% end %>
+              </div>
+              <%= hidden_field_tag :size_ids, nil, id: "size_ids" %>
+            </div>
+              <%= label_tag "Quantity" %>
+              <%= number_field_tag "quantity" %><br><br>
+              <%= form.submit "Add to Cart", class: "btn btn-primary" %>
+            </div><br>
           <% end %>
           </div>
-          <%= hidden_field_tag :size_ids, nil, id: "size_ids" %>
+          </div>
+          </div>
+          
+          <br>
+          <% if current_user.admin? %>
+          <%= link_to "Edit", edit_product_path, class:"btn btn-outline-success" %>
+          <%= link_to 'Destroy', product_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+          <% end %>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-          <%= label_tag "Quantity" %>
-          <%= number_field_tag "quantity" %><br><br>
-          <%= form.submit "Add to Cart", class: "btn btn-primary" %>
-        </div><br>
-    <% end %>
-    </div>
-    </div>
-  </div>
-    
-      <br>
-<% if current_user.admin? %>
-<%= link_to "Edit", edit_product_path, class:"btn btn-outline-success" %>
-<%= link_to 'Destroy', product_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
-<% end %>
-<br>
-<hr>
-<% if current_user.admin? %>
-<%= link_to new_product_similar_product_path(@product), as:"Add Related Products" do %>
-  <h5><%= image_tag "https://cdn-icons-png.flaticon.com/128/3416/3416075.png",size:"30x30", alt: "Logo" %>
-  <%= link_to "Add Related Product", new_product_similar_product_path(@product), class:"style:font-size:21px; text-dark",style:"text-decoration: none;" %></h5>
-  <% end %>
-<% end %>
-<br>
-<% if @similar_products.any? %>
-  <h2>Similar Products</h2>
-  <br>
-  <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
-  <% @product.similar_products.each do |similar_product|%>
-      <div class="card m-1" style="width: 18rem;">
-      <%= link_to product_similar_product_path(@product, similar_product), style:"text-decoration: none;" do %>
-      <% if similar_product.images.attached? %>
-        <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x250"%>
-      <% end %>
-      <div class="card-body">
-      <h5 class="card-title text-dark"><%= similar_product.name %></h5>
-      <div class="text-dark">
-      <strong>Price:</strong> &nbsp <%= number_to_currency(similar_product.price, unit: "₹", format: "%u %n") %><br>
-      <strong>Size:</strong> &nbsp <%= similar_product.size %>
-      </div>
-      <%= link_to "Show Product", product_similar_product_path(@product, similar_product), class:"btn btn-outline-success justify-content-center d-flex"%>
-      <% end %>
-      </div>
-  </div>
-  <% end %>
-  </div>
-<% end %>
+        <hr>
+        <% if current_user.admin? %>
+        <%= link_to new_product_similar_product_path(@product), as:"Add Related Products" do %>
+        <h5><%= image_tag "https://cdn-icons-png.flaticon.com/128/3416/3416075.png",size:"30x30", alt: "Logo" %>
+        <%= link_to "Add Related Product", new_product_similar_product_path(@product), class:"style:font-size:21px; text-dark",style:"text-decoration: none;" %></h5>
+        <% end %>
+        <% end %>
+        <br>
+        <h2>Similar Products</h2>
+        <% if @similar_products.any? %>
+        <br>
+        <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
+        <% @product.similar_products.each do |similar_product|%>
+        <div class="card m-1" style="width: 18rem;">
+        <%= link_to product_similar_product_path(@product, similar_product), style:"text-decoration: none;" do %>
+        <% if similar_product.images.attached? %>
+          <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x250"%>
+        <% end %>
+        <div class="card-body">
+        <h5 class="card-title text-dark"><%= similar_product.name %></h5>
+        <div class="text-dark">
+        <strong>Price:</strong> &nbsp <%= number_to_currency(similar_product.price, unit: "₹", format: "%u %n") %><br>
+        <strong>Size:</strong> &nbsp <%= similar_product.size %>
+        </div>
+        <%= link_to "Show Product", product_similar_product_path(@product, similar_product), class:"btn btn-outline-success justify-content-center d-flex"%>
+        <% end %>
+        </div>
+        </div>
+        <% end %>
+        </div>
+        <% end %>         
+
 
 <script>
-  $(document).ready(function() {
-    $('.size-button').click(function() {
-      // Get the size ID from the data attribute
-      var sizeId = $(this).data('size-id');
-      // Set the value of the hidden input field for size_ids
-      $('#size_ids').val(sizeId);
-    });
-  });
+$(document).ready(function() {
+$('.size-button').click(function() {
+// Get the size ID from the data attribute
+var sizeId = $(this).data('size-id');
+// Set the value of the hidden input field for size_ids
+$('#size_ids').val(sizeId);
+});
+});
 </script>
-
-
-
-
-
-
-
-
-
-

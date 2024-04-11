@@ -1,5 +1,17 @@
-<%= form_with(model: @product, local: true) do |form| %>
-  <div class="background">
+<%= form_with(model: @category, local: true) do |form| %>
+    <% if @category.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
+  
+        <ul>
+          <% @category.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="background">
     <section class="vh-100">
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -7,7 +19,7 @@
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
               <div class="card-body p-5 text-center">
 
-                <h3 class="mb-5">Add Product</h3>
+                <h3 class="mb-5">Add Category</h3>
 
                 <div class="form-outline mb-4">
                   
@@ -20,24 +32,9 @@
                 <%= form.text_field :desc ,class:"form-control form-control-lg" %>
                 </div>
 
-                
-                <div class="form-outline mb-4">
-                <%= form.label :price %>
-                <%= form.number_field :price ,class:"form-control form-control-lg" %>
-                </div>
-                <div class="form-outline mb-4">
-                  <%= form.label :quantity %>
-                  <%= form.number_field :quantity, min: 0 ,class:"form-control form-control-lg"%>
-                </div>
-
                 <div class="form-outline mb-4">
                 <%= form.label :images %>
                 <%= form.file_field :images, multiple: true %>
-                </div>
-
-                <div class="form-outline mb-4">
-                <%= form.label :category %>
-                <%= form.collection_select :category_id, Category.all, :id, :name, prompt: " ",class:"form-control form-control-lg" %>
                 </div>
 
                 <div class="action mb-4">

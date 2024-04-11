@@ -22,7 +22,9 @@ class LineitemsController < ApplicationController
    end
 
    def create
+        user = User.find(params[:user_id])
         product = Product.find(params[:product_id])
+        cart = current_user.carts
         size_ids = Array(params[:size_ids]).map(&:to_i)
         size_ids.each do |size_id|
         lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
@@ -32,7 +34,7 @@ class LineitemsController < ApplicationController
               lineitem.size << Size.find(size_id)
               lineitem.save
             else
-             @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids])
+             @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids], user: user)
             end
         end
         total_qty =  product.quantity - params[:quantity].to_i

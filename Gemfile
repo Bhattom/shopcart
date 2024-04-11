@@ -88,3 +88,10 @@ gem "turbolinks", "~> 5.2"
 gem 'stripe'
 
 gem "razorpay", "~> 3.2"
+
+
+gem "ransack", "~> 4.1"
+
+gem "breadcrumbs_on_rails", "~> 4.1"
+
+gem 'mini_magick'

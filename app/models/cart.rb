@@ -1,7 +1,7 @@
 class Cart < ApplicationRecord
     has_many :lineitems, dependent: :destroy
     has_many :orders
-    belongs_to :user
+    
     
     def add_product(product, quantity, size_ids)
         size_ids = Array(size_ids)

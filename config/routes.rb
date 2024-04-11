@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
+  get 'categories/new'
+  get 'categories/create'
   resources :products do
     post '/update_quantity', to: 'products#update_quantity'
+    collection do
+      get '/products', to: 'products#product', as: 'products'
+    end
     resources :similar_products
+    collection do
+      get 'filtered'
+    end
   end 
   resources :carts do
     resources :lineitems
@@ -16,6 +24,9 @@ Rails.application.routes.draw do
     patch 'increase_stk', on: :member
     patch 'decrease_stk', on: :member
   end
+  resources :categories 
+
+
   resources :orders
   resources :addresses
   devise_for :users

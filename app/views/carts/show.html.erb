@@ -1,7 +1,7 @@
 <html>
 <body>
 <div class="d-flex justify-content-center" style="font-size:21px;">
-    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", '#' ,style:"text-decoration: none;",class:"text-dark" %>  
+    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", new_payment_path ,style:"text-decoration: none;",class:"text-dark" %>  
 </div>
 <h2> Your Cart </h2>
 <%= form_with(model: Order.new, url: orders_path, method: :post) do |form| %>
