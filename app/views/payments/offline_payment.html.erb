@@ -1,0 +1,164 @@
+<style>
+  .align-item-center {
+    text-align: center;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
+            <div class="align-item-center">
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-9 col-md-7 mx-auto">
+                    <div class="card my-5 shadow">
+                      <div class="card-body">
+                        <div class="row">
+                          <h2>Offline Payment (Cash on Delivery)</h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3>Order Summary</h3>
+            <% @cart.lineitems.each do |item| %>
+              <p><%= item.product.name %> - <%= item.quantity %> x <%= number_to_currency(item.product.price, unit: "₹", format: "%u %n") %></p>
+            <% end %>
+            
+            <p><strong>Total Amount:</strong> <%= number_to_currency(@cart.subtotal, unit: "₹", format: "%u %n") %></p>
+            
+            <h3>Payment Method</h3>
+            Cash on Delivery<br><br>
+            
+            <h3> Order Status</h3>
+            <ul class="status-container">
+              <% Order.tracks.each do |t| %>
+                <li id="track_<%= t[1] %>" class="status-item">
+                  <span class="status-text" data-track-id="<%= t[1] %>"><%= t[0] %></span>
+                </li>
+              <% end %>
+            </ul>
+
+            <div class="d-flex justify-content-between">
+              <div>
+                <%= link_to "Back", new_payment_path, class:"btn btn-outline-success btn-lg" %>
+              </div>
+              <div>
+                <% if current_user.orders.last.track == 'Received' %>
+                    <%= link_to "Print Bill", invoice_print_payments_path , class:"btn btn-outline-success btn-lg" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var trackId;
+  var scriptExecuted = false;
+  var statuses = ['Placed', 'Shipped', 'Delivered', 'Received']; // Define the statuses
+
+  function updateTrackStatus() {
+      // Iterate over each status
+      statuses.forEach(function(status) {
+          $.ajax({
+              url: '/payments/offline_payment',
+              method: 'GET',
+              dataType: 'json', 
+              data: { track: trackId },
+              success: function(data) {
+                  console.log(data);
+                  
+                  data.forEach(function(track) {
+                      console.log('Track status:', track[0]);
+                      console.log('Identifier:', track[1]);
+                      
+                      var currentTrackId = track[1];
+                      var newStatus = track[0];
+                      
+                      if (newStatus === status) { 
+                          $('#track_' + currentTrackId + ' span').addClass('hovered');
+                          
+
+                          updateStatusInDatabase(currentTrackId, newStatus);
+                          applyHoverEffect();
+                      }
+                  });
+                  
+                  scriptExecuted = true;
+              },
+              error: function(xhr, status, error) {
+                  console.error('Error fetching track status:', error);
+              }
+          });
+      });
+  }
+
+  function updateStatusInDatabase(trackId, newStatus) {
+      $.ajax({
+          url: '/payments/update_status',
+          method: 'POST',
+          dataType: 'json',
+          data: { track_id: trackId, status: newStatus },
+          success: function(response) {
+              console.log('Status updated in the database:', response.message);
+          },
+          error: function(xhr, status, error) {
+              console.error('Error updating status in the database:', error);
+          }
+      });
+  }
+
+  $(document).ready(function() {
+      // Apply hover effect to dynamically added elements
+      applyHoverEffect();
+      
+      // Check if the script has already been executed
+      if (!scriptExecuted) {
+          // Initial call to start the update process
+          updateTrackStatus();
+      }
+      setTimeout(updateTrackStatus, 60000);
+  });
+
+  function applyHoverEffect() {
+      $('li span.hovered').hover(
+          function() {
+              $(this).css('background-color', '#f0f0f0');
+          },
+          function() {
+              $(this).css('background-color', '');
+          }
+      );
+  }
+</script>
+
+<style>
+  .status-container {
+    display: flex;
+    padding: 0;
+    list-style-type: none;
+    justify-content: center;
+  }
+  .status-item {
+    flex: 0 1 auto; /* Adjust flex property */
+    padding: 5px; /* Reduce padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f0f0f0; 
+  }
+  .status-item:last-child {
+    background-color: #4CAF50; 
+    color: black; 
+  }
+</style>

@@ -1,7 +1,6 @@
 <div class="d-flex justify-content-end">
     <%= current_user.email %>
 </div>
-
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-7 col-lg mx-auto">
@@ -82,6 +81,11 @@ document.getElementById('rzp-button1').onclick = function(e){
     var orderId = this.getAttribute('data-order-id');
     console.log(orderId);
     var cartAmount = <%= @cart.subtotal %>;
+    if (<%= current_user.carts.last.payment %> === true) {
+        window.location.href = '/payments/success';
+        alert("Payment has already been made.");
+        return;
+    }
 
     var options = {
         "key": "rzp_test_DeXPCIrBNCQc32",
@@ -91,9 +95,7 @@ document.getElementById('rzp-button1').onclick = function(e){
         "description": "Test Transaction",
         "order_id": orderId,
         "handler": function (response){
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature)
+          window.location.href = '/payments/success';
         },
         "prefill": {
             "name": "Om Bhatt",

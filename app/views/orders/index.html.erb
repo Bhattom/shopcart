@@ -1,6 +1,4 @@
-<div class="d-flex justify-content-center" style="font-size:21px;">
-    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", new_payment_path ,style:"text-decoration: none;",class:"text-dark" %>  
-</div>
+
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-7 col-lg mx-auto">
@@ -11,7 +9,7 @@
               <h2>Your Order</h2>
             </div>
             <div class="col-md-6 text-end">
-              <%= link_to 'Cancle Order', cart_path(@cart) , class:"btn btn-outline-primary btn-lg"%>
+              <%= link_to 'Continue', new_address_path , class:"btn btn-outline-primary btn-lg"%>
             </div>
             <% @cart.lineitems.each do |lineitem| %>
                 <div class="container">

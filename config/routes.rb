@@ -27,7 +27,9 @@ Rails.application.routes.draw do
   resources :categories 
 
 
-  resources :orders
+  resources :orders do
+    get '/status', to: 'orders#status', as: 'status'
+  end
   resources :addresses
   devise_for :users
   root to: "products#index"
@@ -36,7 +38,10 @@ Rails.application.routes.draw do
       post 'create_payment'
       post 'payment_callback'
       get '/success', to: 'payments#success', as: 'success'
-
+      get '/offline_payment', to: 'payments#offline_payment', as: 'offline_payment'
+      get '/invoice_print', to: 'payments#invoice_print', as: 'invoice_print'
+      get 'download_pdf'
+      post '/update_status', to: 'payments#update_status'
     end
   end
   post '/payments/create_payment/:order_id', to: 'payments#create_payment', as: 'create_payment'

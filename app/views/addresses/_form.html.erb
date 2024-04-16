@@ -1,6 +1,4 @@
-<div class="d-flex justify-content-center" style="font-size:21px;">
-    <%= link_to "Cart", cart_path(@cart),class:"text-dark", style:"text-decoration: none;" %>&nbsp------&nbsp<%= link_to "Address" , new_address_path, style:"text-decoration: none;",class:"text-dark" %>&nbsp------&nbsp<%= link_to "Payment", new_payment_path ,style:"text-decoration: none;",class:"text-dark" %>  
-</div>
+
 <br>
 <div class="d-flex justify-content-center">
 <h5><strong> Use This Addresses:&nbsp</strong></h5>
@@ -49,7 +47,6 @@
                 <div class="card-body">
                 <div class="row">
                     <%= form_with(model: @address, local: true) do |form| %>
-                        <%= hidden_field_tag :user_id, current_user.id %>  
                 <div class="row">
                 <div class="field col-12 mt-4">
                     <% invalid = @address.errors.include?(:email) %>
@@ -135,6 +132,20 @@
                     <% end %>
                     </div>
                 </div>
+                <div class="field col-6 mt-4">
+                    <% invalid = @address.errors.include?(:city) %>
+                    <div class="form-group">
+                    <%=form.label :user_id%>
+                    <%= form.hidden_field :user_id, class: "form-control #{'is-invalid' if invalid}", placeholder: 'City Name', value: current_user.id %>
+                    <% if invalid %>
+                        <div class="invalid-feedback d-block">
+                        <% @address.errors.full_messages_for(:city).each do |error_message| %>
+                            <%= error_message %>.
+                        <% end %>
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-center mt-4">
                     <div class="actions">
                     <%= form.submit %>  
@@ -142,6 +153,10 @@
                 </div>
                 <% end %>   
                 </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-center">
+                <%= link_to "Continue", new_payment_path, class:"btn btn-outline-success btn-lg" %>
                 </div>
             </div>
             </div>

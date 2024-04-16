@@ -1,6 +1,12 @@
 class PaymentsController < ApplicationController
+  require 'prawn'
     def new
         @payment = Payment.new
+        @cart = current_user.carts.last
+        add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595791.png" style="width: 20px; height: 20px;"><br>Cart</div>'.html_safe, cart_path(@cart), class: 'breadcrumb-item',style:"text-decoration:none;", data: { index: 1 })
+        add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595792.png" style="width: 20px; height: 20px;"><br>Order</div>'.html_safe, orders_path, class: 'breadcrumb-item',style:"text-decoration:none;", data: { index: 2 })
+        add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595793.png" style="width: 20px; height: 20px;"><br>Address</div>'.html_safe, new_address_path, class: 'breadcrumb-item', style:"text-decoration:none;", data: { index: 3 })
+        add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595794.png" style="width: 20px; height: 20px;"><br>Payment</div>'.html_safe, new_payment_path, class: 'breadcrumb-item', data: { index: 4 })    
     end
     def create
         Razorpay.setup('rzp_test_DeXPCIrBNCQc32', 'lY9cRXuTNcryb4nebgR17BSF')
@@ -50,23 +56,75 @@ class PaymentsController < ApplicationController
     end
 
     def success
-        razorpay_payment_id = params[:razorpay_payment_id]
-    
-        begin
-          @payment = Razorpay::Payment.fetch(razorpay_payment_id)
-    
-          # Check if payment details are fetched successfully
-          if @payment.present?
-            render 'success'
-          else
-            # Handle the case where payment details cannot be fetched
-            flash[:error] = "Error retrieving payment details."
-            redirect_to root_path
+      render 'success'
+      end
+      
+      def offline_payment
+        @cart = current_user.carts.last 
+        @cart_items = @cart.lineitems 
+        @total_amount = @cart.subtotal
+        
+        respond_to do |format|
+          format.html { render 'offline_payment' } # Render HTML view
+          format.json do
+            tracks_data = Order.tracks.map { |t| [t[0], t[1]] }
+            render json: tracks_data # Return JSON data
           end
-        rescue Razorpay::BadRequestError => e
-          # Handle the case where the payment ID provided does not exist
-          flash[:error] = "Error fetching payment details: #{e.message}"
-          redirect_to root_path
         end
       end
+
+      def update_status
+        track_id = params[:track_id]
+        status = params[:status]
+        p track_id
+        p status
+        order = current_user.orders.last
+        p order
+        p 'wwwwww'
+        p 'wwwwww'
+        if order
+          if order.update(track: track_id.to_i)
+            render json: { message: "Status updated successfully." }, status: :ok
+          else
+            render json: { error: track.errors.full_messages.join(", ") }, status: :unprocessable_entity
+          end
+        else
+          render json: { error: "Track not found." }, status: :not_found
+        end
+      end
+
+        def invoice_print
+          user = current_user 
+          items = @cart.lineitems
+          @cart = current_user.carts.last
+          payment_mode = params[:payment]
+          pdf_content = generate_pdf(user, items, payment_mode)
+          send_data pdf_content, filename: "Invoice Bill.pdf", type: "application/pdf"
+        end
+
+        
+    private
+
+    def generate_pdf(user, items, payment_mode)
+      Prawn::Document.new do |pdf|
+        pdf.text "Invoice", align: :center, size: 18, style: :bold
+        pdf.move_down 20
+        pdf.text "ShopCart", align: :right, style: :italic
+        pdf.text "Email: #{user.email}"
+        pdf.text "Date: #{Date.today.strftime('%B %d, %Y')}"
+        pdf.move_down 20
+        pdf.text "Items Purchased", style: :bold
+        pdf.move_down 10
+
+        table_data = [["Name", "Description", "Quantity", "Unit Price", "Total"]]
+        @cart.lineitems.each do |lineitem|
+          table_data << [lineitem.product.name, lineitem.product.desc, lineitem.quantity, "#{'%.2f' % lineitem.unit_price}", "#{'%.2f' % (lineitem.quantity * lineitem.unit_price)}"]
+        end
+        pdf.table(table_data) 
+        total_amount = items.sum { |item| item.quantity * item.unit_price }
+        pdf.move_down 20
+        pdf.text "Total Amount: #{'%.2f' % total_amount}", align: :right, style: :bold
+      end.render
+    end
+    
   end

@@ -16,6 +16,8 @@
  @import "bootstrap";
  @import "jquery-ui.css";
 
+ @import "font-awesome";
+
 
 
 
@@ -200,25 +202,47 @@ a{
   z-index: -1; /* Ensure the background is behind other content */
 }
 
-.breadcrumbs {
+.breadcrumb {
   list-style: none;
   padding: 0;
 }
 
-.breadcrumbs li {
+.breadcrumb li {
   display: inline;
 }
 
-.breadcrumbs li:not(:last-child)::after {
-  content: "›";
+.breadcrumb li:not(:last-child)::after {
   margin: 0 5px;
 }
 
-.breadcrumbs a {
+.breadcrumb a {
   text-decoration: none;
   color: #333;
 }
 
-.breadcrumbs a:hover {
+.breadcrumb a:hover {
   text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  border-right: 1px solid black; /* Adjust the border style as needed */
+  width: 20px; /* Adjust the width of the separator */
+  height: 20px; /* Adjust the height of the separator */
+  margin: 20px; /* Adjust the margin around the separator */
+}
+
+
+.visited {
+  pointer-events: none;
+  color: green;
+}
+
+.visited::after {
+  content: '✔'; /* Unicode checkmark character */
+  color: green;
+  margin-left: 5px;
+}
+
+.hovered-text:hover {
+  background-color: #f0f0f0;
 }

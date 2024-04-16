@@ -95,3 +95,14 @@ gem "ransack", "~> 4.1"
 gem "breadcrumbs_on_rails", "~> 4.1"
 
 gem 'mini_magick'
+
+gem "letter_opener", group: :development
+
+gem "prawn", "~> 2.5"
+
+gem "prawn-table", "~> 0.2.2"
+
+gem "font-awesome-sass", "~> 6.5"
+
+gem 'font-awesome-rails'
+

@@ -7,6 +7,38 @@
       <div class="card my-5 shadow">
         <div class="card-body">
           <div class="row">
+                <table class="table table-bordered text-center">
+                <% user = current_user.addresses.last %>
+                <tr>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th> Pincode </th>
+                </tr>
+                <tr>
+                <td>
+                    <%= user.address %>
+                </td>
+                <td>
+                    <%= user.city %>
+                </td>
+                <td>
+                    <%= user.pincode %><br>
+                </td>
+                </tr>
+                </table>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
             <% if @cart.lineitems.any? %>
               <table>
                 <thead>
@@ -37,5 +69,27 @@
   </div>
 </div>
 <div class="d-flex justify-content-center">
-<%= button_to "Make Payment", create_payment_payments_path, method: :post, class:"btn btn-outline-success btn-lg " %>
+<strong> Select Payment Mode:</strong>&nbsp &nbsp
+<%= select_tag(:payment, options_for_select(["Cash on Delivery", "Online payment"],params[:payment]), include_blank: "Select Payment Type", class: "search-form-input", id: "payment-select") %>
 </div>
+<br>
+<!----<div class="d-flex justify-content-center">
+<%= button_to "Make Payment", create_payment_payments_path, method: :post, class:"btn btn-outline-success btn-lg " %>
+</div>--->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const paymentSelect = document.getElementById("payment-select");
+
+    paymentSelect.addEventListener("change", function() {
+      const selectedPayment = paymentSelect.value;
+      
+      // Redirect based on selected payment
+      if (selectedPayment === "Cash on Delivery") {
+        window.location.href = "offline_payment";
+      } else if (selectedPayment === "Online payment") {
+        window.location.href = "create_payment";
+      }
+    });
+  });
+</script>

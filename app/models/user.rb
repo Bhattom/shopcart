@@ -18,4 +18,11 @@ class User < ApplicationRecord
          def guest?
            role == 'guest'
          end
+
+         def run
+          User.find_each do |user|
+            UserMailer.with(user: user).deliver_later
+          end
+        end
 end
+

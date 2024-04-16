@@ -75,7 +75,30 @@
         <%= link_to "Sign Up" , new_user_registration_path %> | 
         <%= link_to "Log In" , new_user_session_path %>
     <% end %>
+    <ol class="breadcrumb d-flex justify-content-center">
+    <%= render_breadcrumbs :tag => :li, :separator => "&ndash;&ndash;&ndash;&ndash;&ndash;", :cart_id => @cart.id, class: "breadcrumb-item text-dark", style:"text-decoration: none;" if @cart %>
+    </ol>
     <%= yield %>
+    <script>
+        $(document).ready(function() {
+            var previousIndex = -1;
+
+            $('.breadcrumb-item').click(function(event) {
+                var clickedIndex = $(this).index();
+                if (previousIndex !== -1) {
+                    $('.breadcrumb-item').eq(previousIndex).addClass('disabled');
+                    $('.breadcrumb-item').eq(previousIndex).removeAttr('href');
+                }
+
+                // Disable the current clicked breadcrumb item
+                $(this).addClass('disabled');
+                $(this).removeAttr('href');
+
+                // Update the previous index to the current clicked index
+                previousIndex = clickedIndex;
+            });
+        });
+    </script>
     <footer class="d-flex justify-content-center">
       <%= link_to '#', class:"back-to-top" do%>
         <%= image_tag "https://cdn-icons-png.flaticon.com/128/4501/4501771.png",size:"60x60", alt: "Logo" %>

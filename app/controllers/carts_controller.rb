@@ -2,13 +2,21 @@ class CartsController < ApplicationController
     include CurrentCart
     rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
     before_action :set_cart, only: [:show, :edit, :update, :destroy]
+
     def index
       @carts = Cart.all
+      add_breadcrumb "index", index_path
     end
 
     def show
       @subtotal = @cart.lineitems.sum(&:unit_price)
       @cart.update(subtotal: @cart.subtotal)
+      
+      add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595791.png" style="width: 20px; height: 20px;"><br>Cart</div>'.html_safe, cart_path(@cart), class: 'breadcrumb-item', data: { index: 1 })
+      add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595792.png" style="width: 20px; height: 20px;"><br>Order</div>'.html_safe, orders_path, class: 'breadcrumb-item',style:"color:blue;", data: { index: 2 })
+      add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595793.png" style="width: 20px; height: 20px;"><br>Address</div>'.html_safe, new_address_path(cart_id: @cart.id), class: 'breadcrumb-item',style:"color:blue;", data: { index: 3 })
+      add_breadcrumb('<div style="text-align: center;"><img src="https://cdn-icons-png.flaticon.com/128/10595/10595794.png" style="width: 20px; height: 20px;"><br>Payment</div>'.html_safe, new_payment_path(cart_id: @cart.id), class: 'breadcrumb-item',style:"color:blue;", data: { index: 4 })
+
     end
 
     def new

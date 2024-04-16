@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to website, <%= @user.email %></h1>
+    <p>
+      You have successfully signed up to example.com,
+      your email_id is: <%= @user.email %>.<br>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%= @url %>.
+    </p>
+    <p> Your Order Is Confirmed!!</p>
+    <p> Your Cart Details Is Mention Below</p>
+    <style>
+    .table-bordered-dark td {
+        border: 1px solid black; /* Adjust the color and thickness as needed */
+    }
+</style>
+<style>
+    .table-bordered-dark th {
+        border: 1px solid black; /* Adjust the color and thickness as needed */
+    }
+</style>
+    <table class="table table-bordered-dark text-center">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Description</th>
+                    <th> Product Quantity </th>
+                    <th> Product Price </th>
+                </tr>
+                <% @order.cart.lineitems.each do |lineitem| %>
+                <tr>
+                <td>
+                <%= lineitem.product.name %>
+                </td>
+                <td>
+                    <%= lineitem.product.desc %>
+                </td>
+                <td>
+                    <%= lineitem.quantity %>
+                </td>
+                <td>
+                    <%= lineitem.product.price %>
+                </td>
+                </tr>
+                <% end %>
+                </table>
+                <br>
+                <br>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw-pOlXK339cQHVGx0AMgYW8TKlPK0ygNukkkEn8uSaw&s">
+    <p>Thanks for shoping with us and have a great day!</p>
+    <p> Our Office Details:</p>
+    <p> Contact no: +917490933937 </p>
+    <p> Office address </p>
+    <p> 452, Aanad Complex Near Javahar Chock, Behind of New L.G Hospital, Maninagar Char Rasta, Maninager , Ahemdabad-380008 </p> 
+  </body>
+</html>
