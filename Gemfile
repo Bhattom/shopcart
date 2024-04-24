@@ -106,3 +106,7 @@ gem "font-awesome-sass", "~> 6.5"
 
 gem 'font-awesome-rails'
 
+
+gem "devise-two-factor", "~> 5.0"
+
+gem "rqrcode", "~> 2.2"

@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index, :show]
+  before_action :redirect_if_authenticated, only: [:create, :new]
+
   def index
     @products = Product.all
     @categories = Category.all
@@ -72,6 +75,13 @@ class ProductsController < ApplicationController
     else
       @products = Product.all
     end
+  end
+
+  def next_batch
+    @products = Product.page(params[:page]).per(10) # Adjust per() according to your desired number of products per page
+
+    # Render the next batch of products without layout to be used in AJAX request
+    render partial: 'product_batch', locals: { products: @products }
   end
   private
 

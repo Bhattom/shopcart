@@ -18,13 +18,13 @@
                   <div class="carousel-inner">
                    <% (0...@product.images.count).each do |image| %>
                     <div class="carousel-item active">
-                    <%= image_tag(@product.images[1], class:"d-block w-100",size:"400x400") %>
+                    <%= image_tag(@product.images[1], class:"d-block w-100",size:"400x500") %>
                     </div>
                     <div class="carousel-item">
-                    <%= image_tag(@product.images[0],class:"d-block w-100",size:"400x400") %>
+                    <%= image_tag(@product.images[0],class:"d-block w-100",size:"400x500") %>
                     </div>
                     <div class="carousel-item">
-                    <%= image_tag(@product.images[2],class:"d-block w-100",size:"400x400") %>
+                    <%= image_tag(@product.images[2],class:"d-block w-100",size:"400x500") %>
                     </div>
                     <% end %>
                   </div>
@@ -49,7 +49,9 @@
           <%= render partial: 'sizes', locals: { sizes: @product.sizes } %>
           <%= form_with(model: Lineitem.new, url: lineitems_path, method: :post) do |form| %>
             <%= hidden_field_tag :product_id, @product.id %>
+            <% if user_signed_in? %>
             <%= hidden_field_tag :user_id, current_user.id %>
+            <% end %>
             <div class="field">
               <strong>Sizes:<strong>
               <div class="size-buttons">
@@ -71,7 +73,7 @@
           </div>
           
           <br>
-          <% if current_user.admin? %>
+          <% if current_user.present? && current_user.admin? %>
           <%= link_to "Edit", edit_product_path, class:"btn btn-outline-success" %>
           <%= link_to 'Destroy', product_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
           <% end %>
@@ -82,7 +84,7 @@
           </div>
         </div>
         <hr>
-        <% if current_user.admin? %>
+        <% if current_user.present? && current_user.admin? %>
         <%= link_to new_product_similar_product_path(@product), as:"Add Related Products" do %>
         <h5><%= image_tag "https://cdn-icons-png.flaticon.com/128/3416/3416075.png",size:"30x30", alt: "Logo" %>
         <%= link_to "Add Related Product", new_product_similar_product_path(@product), class:"style:font-size:21px; text-dark",style:"text-decoration: none;" %></h5>
@@ -94,10 +96,10 @@
         <br>
         <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
         <% @product.similar_products.each do |similar_product|%>
-        <div class="card m-1" style="width: 18rem;">
+        <div class="card m-1" style="width: 20rem; heigth: 30rem;">
         <%= link_to product_similar_product_path(@product, similar_product), style:"text-decoration: none;" do %>
         <% if similar_product.images.attached? %>
-          <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x250"%>
+          <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x300"%>
         <% end %>
         <div class="card-body">
         <h5 class="card-title text-dark"><%= similar_product.name %></h5>

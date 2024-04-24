@@ -30,9 +30,10 @@ class LineitemsController < ApplicationController
         lineitem = @cart.lineitems.find_or_initialize_by(product_id: product.id)
         quantity = params[:quantity].to_i
             if lineitem.present?
-              lineitem = @cart.add_product(product, quantity, size_id)
-              lineitem.size << Size.find(size_id)
-              lineitem.save
+             lineitem = @cart.add_product(product, quantity, size_id)
+             size_id = size_id.to_i # Convert size_id to integer if necessary
+             lineitem.size << Size.find(size_id)
+             lineitem.save
             else
              @lineitem = Lineitem.new(product: product, quantity: params[:quantity], size_id: params[:size_ids], user: user)
             end

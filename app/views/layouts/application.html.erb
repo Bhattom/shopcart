@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
   <head>
     <title>Shopcart</title>
@@ -44,7 +44,7 @@
                   <a class='btn btn-outline-success dropdown-toggle text-white' data-bs-toggle="dropdown" aria-current="page" href="/users/userinfo" aria-expanded="false">User Info</a>
                 <ul class="dropdown-menu">
                   <li><span class="dropdown-item"><%=current_user.email%></span></li>
-                  <a class="dropdown-item text-primary" rel="nofollow"  href="/users/edit">Edit</a>
+                  <a class="dropdown-item text-primary" rel="nofollow"  href="/users/edit">Settings</a>
                   <a class="dropdown-item text-primary" rel="nofollow" data-method="delete" href="/users/sign_out">Logout</a>
                   </li> 
                 </ul> 
@@ -54,7 +54,6 @@
     </div>
   </nav>
   <% end %>
-  <script src="https://js.stripe.com/v3/"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -64,20 +63,46 @@
     <%= javascript_include_tag "activation" %>
     </head>
 
-  <body style="overflow-x:hidden">  
-  <% if flash.present? %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-  <% end %>
-    <% if user_signed_in? %>
+  <body >  
+  <% if notice %>
+  <div class="alert alert-success" role="alert">
+    <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+    <h5><%= notice %></h5>
+  </div>
+<% end %>
+<% if alert %>
+  <div class="alert alert-danger" role="alert">
+    <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+    <%= alert %>
+  </div>
+<% end %>
+
+  <% if user_signed_in? %>
      
     <% else %>
-        <%= link_to "Sign Up" , new_user_registration_path %> | 
-        <%= link_to "Log In" , new_user_session_path %>
+    <nav class="navbar sticky-top navbar-dark bg-dark">
+    <div class="container-fluid d-flex justify-content-between">
+      <div>
+        <a class="navbar-brand shopcart-brand" href="/">Shopcart</a>
+      </div>
+      <div class="d-flex">
+        <div class="p-2">
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-secondary btn-lg" %>
+        </div>
+        <div class="p-2">
+          <%= link_to "Log In", new_user_session_path, class: "btn btn-secondary btn-lg" %>
+        </div>
+      </div>
+    </div>
+  </nav>
     <% end %>
+    <% if breadcrumbs.present? %>
     <ol class="breadcrumb d-flex justify-content-center">
     <%= render_breadcrumbs :tag => :li, :separator => "&ndash;&ndash;&ndash;&ndash;&ndash;", :cart_id => @cart.id, class: "breadcrumb-item text-dark", style:"text-decoration: none;" if @cart %>
     </ol>
+    <% end %>
     <%= yield %>
     <script>
         $(document).ready(function() {

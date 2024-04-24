@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     post '/update_quantity', to: 'products#update_quantity'
     collection do
       get '/products', to: 'products#product', as: 'products'
+      get 'products/products', to: 'products#next_batch', as: 'products_products'
+
     end
     resources :similar_products
     collection do
@@ -31,11 +33,24 @@ Rails.application.routes.draw do
     get '/status', to: 'orders#status', as: 'status'
   end
   resources :addresses
-  devise_for :users
+
+  devise_for :users, controllers: { registrations: 'users/registrations',
+    sessions: 'users/sessions'}
+  devise_scope :user do
+    get '/verify_user', to: 'devise/sessions#verify'
+  end
+
+  get 'enable_otp_show_qr', to: 'users#enable_otp_show_qr', as: 'enable_otp_show_qr'
+  post 'enable_otp_verify', to: 'users#enable_otp_verify', as: 'enable_otp_verify'
+
+  get 'users/otp', to: 'users#show_otp', as: 'user_otp'
+  post 'users/otp', to: 'users#verify_otp', as: 'verify_user_otp'
+  post 'verify_otp', to: 'users/sessions#verify_otp'
+  
   root to: "products#index"
   resources :payments, only: [:create, :show, :new] do
     collection do
-      post 'create_payment'
+      post '/create_payment', to: 'payments#create_payment'
       post 'payment_callback'
       get '/success', to: 'payments#success', as: 'success'
       get '/offline_payment', to: 'payments#offline_payment', as: 'offline_payment'

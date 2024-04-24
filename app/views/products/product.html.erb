@@ -60,24 +60,38 @@
   <% end %>
 <% end %>
 <br>
-    <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
-    <% @products.each do |product|%>
-        <div class="card m-1" style="width: 18rem;">
-        <%= link_to product_path(product), style:"text-decoration: none;" do %>
-        <% if product.images.attached? %>
-          <%= image_tag product.images.first, class:"card-img-top", size:"250x250"%>
-        <% end %>
-        <div class="card-body">
-        <h5 class="card-title text-dark"><%= product.name %></h5>
-        <div class="text-dark">
-        <strong>Price:</strong> &nbsp <%= number_to_currency(product.price, unit: "₹", format: "%u %n") %><br><br>
-        </div>
-        <%= link_to "Show Product", product_path(product), class:"btn btn-outline-success justify-content-center d-flex"%>
-        <% end %>
-        </div>
-    </div>
-    <% end %>
-    </div>
+<div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center" id="product-list">
+<%= render partial: 'product_batch', locals: { products: @products.take(10) } %>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+<button id="load-more-btn" class="btn btn-secondary btn-lg">Load More</button>
+</div>
 <% end %>
 
 
+<script>
+  $(document).ready(function() {
+    var Page = 1;
+    console.log(Page);
+
+    function loadNextBatch() {
+      Page++;
+      console.log(Page);
+      $.ajax({
+        url: '<%= products_products_products_path %>',
+        type: 'GET',
+        dataType: 'html',
+        data: { page: Page },
+        success: function(data) {
+          $('#product-list').append(data); 
+        }
+      });
+    }
+
+   
+    $('#load-more-btn').click(function() {
+      loadNextBatch();
+    });
+  });
+</script>

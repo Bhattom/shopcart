@@ -4,3 +4,4 @@
 //= link_tree ../../../vendor/javascript .js
   //= link activation.js
   //= link bcrumb.js
+  //= link products.js

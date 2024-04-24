@@ -97,7 +97,7 @@ class PaymentsController < ApplicationController
           user = current_user 
           items = @cart.lineitems
           @cart = current_user.carts.last
-          payment_mode = params[:payment]
+          payment_mode = params[:payment_mode]
           pdf_content = generate_pdf(user, items, payment_mode)
           send_data pdf_content, filename: "Invoice Bill.pdf", type: "application/pdf"
         end
@@ -112,12 +112,13 @@ class PaymentsController < ApplicationController
         pdf.text "ShopCart", align: :right, style: :italic
         pdf.text "Email: #{user.email}"
         pdf.text "Date: #{Date.today.strftime('%B %d, %Y')}"
+        pdf.text "Payment Mode: #{payment_mode}", style: :bold if payment_mode.present?
         pdf.move_down 20
         pdf.text "Items Purchased", style: :bold
         pdf.move_down 10
-
+    
         table_data = [["Name", "Description", "Quantity", "Unit Price", "Total"]]
-        @cart.lineitems.each do |lineitem|
+        items.each do |lineitem|
           table_data << [lineitem.product.name, lineitem.product.desc, lineitem.quantity, "#{'%.2f' % lineitem.unit_price}", "#{'%.2f' % (lineitem.quantity * lineitem.unit_price)}"]
         end
         pdf.table(table_data) 

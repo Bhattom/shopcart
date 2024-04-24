@@ -70,7 +70,10 @@
 </div>
 <div class="d-flex justify-content-center">
 <strong> Select Payment Mode:</strong>&nbsp &nbsp
-<%= select_tag(:payment, options_for_select(["Cash on Delivery", "Online payment"],params[:payment]), include_blank: "Select Payment Type", class: "search-form-input", id: "payment-select") %>
+<%= form_tag(invoice_print_payments_path, method: "get", id: "payment-form") do %>
+  <%= select_tag(:payment, options_for_select(["Cash on Delivery", "Online payment"], params[:payment]), include_blank: "Select Payment Type", class: "search-form-input", id: "payment-select") %>
+  <%= submit_tag("Submit") %>
+<% end %>
 </div>
 <br>
 <!----<div class="d-flex justify-content-center">
@@ -78,17 +81,15 @@
 </div>--->
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const paymentSelect = document.getElementById("payment-select");
+  document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('payment-form');
+    var selectPayment = document.getElementById('payment-select');
 
-    paymentSelect.addEventListener("change", function() {
-      const selectedPayment = paymentSelect.value;
-      
-      // Redirect based on selected payment
-      if (selectedPayment === "Cash on Delivery") {
-        window.location.href = "offline_payment";
-      } else if (selectedPayment === "Online payment") {
-        window.location.href = "create_payment";
+    selectPayment.addEventListener('change', function() {
+      if (selectPayment.value === 'Cash on Delivery') {
+        form.action = '<%= offline_payment_payments_path %>'; // Set action to COD path
+      } else if (selectPayment.value === 'Online payment') {
+        form.action = '<%= create_payment_payments_path %>'; // Set action to online payment path
       }
     });
   });

@@ -35,6 +35,10 @@ class ApplicationPolicy
   def destroy?
     false
   end
+  
+  def view_user_list?
+    true
+  end
 
   class Scope
     def initialize(user, scope)

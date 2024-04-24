@@ -1,0 +1,15 @@
+<% products.each do |product| %>
+    <div class="card m-1" style="width: 20rem;">
+      <%= link_to product_path(product), style: "text-decoration: none;" do %>
+        <% if product.images.attached? %>
+          <%= image_tag product.images.first, class: "card-img-top", size: "400x400" %>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title text-dark"><%= product.name %></h5>
+          <div class="text-dark">
+            <strong>Price:</strong> <%= number_to_currency(product.price, unit: "₹", format: "%u %n") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>

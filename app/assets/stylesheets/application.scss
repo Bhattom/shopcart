@@ -149,7 +149,6 @@ a{
 }
 
 .background-image {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -192,7 +191,7 @@ a{
 
 
 .background {
-  position: absolute;
+  
   top: 0;
   left: 0;
   width: 100%;
@@ -245,4 +244,18 @@ a{
 
 .hovered-text:hover {
   background-color: #f0f0f0;
+}
+
+.shopcart-brand {
+  font-size: 24px; /* Adjust the font size as needed */
+}
+
+.background-img {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://img.freepik.com/premium-vector/online-shopping-with-smartphone-shop-shopping-cart_269039-853.jpg');
+  background-size: cover;
+  z-index: -1; 
 }

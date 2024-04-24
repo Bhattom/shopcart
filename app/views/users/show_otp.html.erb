@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg mx-auto">
+      <div class="card my-5 shadow">
+        <div class="card-body">
+          <div class="row">
+            <h2>Enter OTP</h2>
+            <%= form_tag verify_user_otp_path, method: :post do %>
+            <div class="field">
+                <%= label_tag :otp_attempt, "OTP Code" %><br />
+                <%= text_field_tag :otp_attempt %>
+            </div>
+            <div class="actions">
+                <%= submit_tag "Verify" %>
+            </div>
+            <% end %>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+

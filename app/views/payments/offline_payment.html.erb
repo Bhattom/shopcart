@@ -25,33 +25,33 @@
                 </div>
               </div>
             </div>
-
-            <h3>Order Summary</h3>
-            <% @cart.lineitems.each do |item| %>
-              <p><%= item.product.name %> - <%= item.quantity %> x <%= number_to_currency(item.product.price, unit: "₹", format: "%u %n") %></p>
-            <% end %>
-            
-            <p><strong>Total Amount:</strong> <%= number_to_currency(@cart.subtotal, unit: "₹", format: "%u %n") %></p>
-            
-            <h3>Payment Method</h3>
-            Cash on Delivery<br><br>
-            
-            <h3> Order Status</h3>
-            <ul class="status-container">
-              <% Order.tracks.each do |t| %>
-                <li id="track_<%= t[1] %>" class="status-item">
-                  <span class="status-text" data-track-id="<%= t[1] %>"><%= t[0] %></span>
-                </li>
-              <% end %>
-            </ul>
-
+            <div class="align-item-center">
+                <h3>Order Summary</h3>
+                <% @cart.lineitems.each do |item| %>
+                <p><%= item.product.name %> - <%= item.quantity %> x <%= number_to_currency(item.product.price, unit: "₹", format: "%u %n") %></p>
+                <% end %>
+                
+                <p><strong>Total Amount:</strong> <%= number_to_currency(@cart.subtotal, unit: "₹", format: "%u %n") %></p>
+                
+                <h3>Payment Method</h3>
+                Cash on Delivery<br>
+    
+                <h3> Order Status</h3>
+                <ul class="status-container">
+                <% Order.tracks.each do |t| %>
+                    <li id="track_<%= t[1] %>" class="status-item">
+                    <span class="status-text" data-track-id="<%= t[1] %>"><%= t[0] %></span>
+                    </li>
+                <% end %>
+                </ul>
+            </div>
             <div class="d-flex justify-content-between">
               <div>
                 <%= link_to "Back", new_payment_path, class:"btn btn-outline-success btn-lg" %>
               </div>
               <div>
                 <% if current_user.orders.last.track == 'Received' %>
-                    <%= link_to "Print Bill", invoice_print_payments_path , class:"btn btn-outline-success btn-lg" %>
+                    <%= link_to "Print Bill", invoice_print_payments_path(payment_mode: params[:payment]) , class:"btn btn-outline-success btn-lg" %>
                 <% end %>
               </div>
             </div>
@@ -66,6 +66,7 @@
   var trackId;
   var scriptExecuted = false;
   var statuses = ['Placed', 'Shipped', 'Delivered', 'Received']; // Define the statuses
+  var lastUpdatedTimes = {}; // Track the last updated time for each track
 
   function updateTrackStatus() {
       // Iterate over each status
@@ -86,11 +87,15 @@
                       var newStatus = track[0];
                       
                       if (newStatus === status) { 
-                          $('#track_' + currentTrackId + ' span').addClass('hovered');
-                          
-
-                          updateStatusInDatabase(currentTrackId, newStatus);
-                          applyHoverEffect();
+                          var lastUpdatedTime = lastUpdatedTimes[currentTrackId] || 0;
+                          var currentTime = Date.now();
+                          // Check if more than 5 minutes have passed since the last update
+                          if (currentTime - lastUpdatedTime > 300000) {
+                              $('#track_' + currentTrackId + ' span').addClass('hovered');
+                              updateStatusInDatabase(currentTrackId, newStatus);
+                              lastUpdatedTimes[currentTrackId] = currentTime; // Update the last updated time
+                              applyHoverEffect();
+                          }
                       }
                   });
                   
@@ -124,10 +129,10 @@
       
       // Check if the script has already been executed
       if (!scriptExecuted) {
-          // Initial call to start the update process
+          
           updateTrackStatus();
       }
-      setTimeout(updateTrackStatus, 60000);
+      setInterval(updateTrackStatus, 300000);
   });
 
   function applyHoverEffect() {
@@ -141,6 +146,7 @@
       );
   }
 </script>
+
 
 <style>
   .status-container {
