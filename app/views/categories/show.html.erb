@@ -2,10 +2,10 @@
 <% if @category.products.present? %>
 <div class="row row-cols-1 row-cols-md-3 g-4 mt-4 justify-content-center">
     <% @category.products.each do |product| %>
-      <div class="card m-1" style="width: 25rem; height: 34rem;">
+      <div class="card m-1" style="width: 25rem; height: 45rem;">
         <%= link_to product_path(product), style: "text-decoration: none;" do %>
           <% if product.images.attached? %>
-            <%= image_tag product.images.first, class: "card-img-top", size: "350x350" %>
+            <%= image_tag product.images.first, class: "card-img-top", size: "400x500" %>
           <% end %>
           <div class="card-body">
             <h5 class="card-title text-dark"><%= product.name %></h5>
@@ -19,9 +19,9 @@
     <% end %>
   </div>
 <% else %>
-<div class="card m-1" style="width: 25rem;">
+<div class="card m-1" style="width: 25rem; height: 45rem;">
 <% if @category.images.attached? %>
-  <%= image_tag @category.images.first, class: "card-img-top", size: "350x350" %>
+  <%= image_tag @category.images.first, class: "card-img-top", size: "400x500" %>
 <% end %>
 <div class="card-body">
   <h5 class="card-title text-dark"><%= @category.desc %></h5>

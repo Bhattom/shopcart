@@ -1,6 +1,5 @@
 class ProductsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
-  before_action :redirect_if_authenticated, only: [:create, :new]
 
   def index
     @products = Product.all

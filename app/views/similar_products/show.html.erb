@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-md-5">
             <div id="carouselExampleFade" class="carousel slide carousel-fade">
-              <div class="carousel-inner">
+              <div class="carousel-inner" style="height:150%;">
                <% (0...@similar_product.images.count).each do |image| %>
                 <div class="carousel-item active">
                 <%= image_tag(@similar_product.images[1], class:"d-block w-100",size:"400x400") %>

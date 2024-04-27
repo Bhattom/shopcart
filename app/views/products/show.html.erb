@@ -15,7 +15,7 @@
           <div class="row">
           <div class="col-md-5">
                 <div id="carouselExampleFade" class="carousel slide carousel-fade">
-                  <div class="carousel-inner">
+                  <div class="carousel-inner" style="height:100%;">
                    <% (0...@product.images.count).each do |image| %>
                     <div class="carousel-item active">
                     <%= image_tag(@product.images[1], class:"d-block w-100",size:"400x500") %>
@@ -94,26 +94,26 @@
         <h2>Similar Products</h2>
         <% if @similar_products.any? %>
         <br>
-        <div class="row row-cols-1 row-cols-md-3 g-4  justify-content-center">
-        <% @product.similar_products.each do |similar_product|%>
-        <div class="card m-1" style="width: 20rem; heigth: 30rem;">
-        <%= link_to product_similar_product_path(@product, similar_product), style:"text-decoration: none;" do %>
+        <div id="similar-products-carousel" class="justify-content-center">
+  <% @product.similar_products.each do |similar_product| %>
+    <div class="card m-1" style="width: 20rem; height: 30rem;">
+      <%= link_to product_similar_product_path(@product, similar_product), style: "text-decoration: none;" do %>
         <% if similar_product.images.attached? %>
-          <%= image_tag similar_product.images.first, class:"card-img-top", size:"250x300"%>
+          <%= image_tag similar_product.images.first, class: "card-img-top", size: "250x300" %>
         <% end %>
         <div class="card-body">
-        <h5 class="card-title text-dark"><%= similar_product.name %></h5>
-        <div class="text-dark">
-        <strong>Price:</strong> &nbsp <%= number_to_currency(similar_product.price, unit: "₹", format: "%u %n") %><br>
-        <strong>Size:</strong> &nbsp <%= similar_product.size %>
+          <h5 class="card-title text-dark"><%= similar_product.name %></h5>
+          <div class="text-dark">
+            <strong>Price:</strong> &nbsp <%= number_to_currency(similar_product.price, unit: "₹", format: "%u %n") %><br>
+            <strong>Size:</strong> &nbsp <%= similar_product.size %>
+          </div>
+          <%= link_to "Show Product", product_similar_product_path(@product, similar_product), class: "btn btn-outline-success justify-content-center d-flex" %>
         </div>
-        <%= link_to "Show Product", product_similar_product_path(@product, similar_product), class:"btn btn-outline-success justify-content-center d-flex"%>
-        <% end %>
-        </div>
-        </div>
-        <% end %>
-        </div>
-        <% end %>         
+      <% end %>
+    </div>
+  <% end %>
+</div>
+        <% end %> 
 
 
 <script>
@@ -125,4 +125,30 @@ var sizeId = $(this).data('size-id');
 $('#size_ids').val(sizeId);
 });
 });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#similar-products-carousel').slick({
+      autoplay: true,
+  autoplaySpeed: 1000,
+  slidesToShow: 4, // Number of slides to show initially
+  responsive: [
+    {
+      breakpoint: 992,
+      settings: {
+        slidesToShow: 3
+      }
+    },
+    {
+      breakpoint: 576,
+      settings: {
+        slidesToShow: 2
+      }
+    }
+  ],
+  swipeToSlide: true, // Enables swiping/dragging to navigate between slides
+  speed: 500
+    });
+  });
 </script>

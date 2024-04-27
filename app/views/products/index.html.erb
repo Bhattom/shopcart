@@ -1,5 +1,4 @@
-<% if current_user.present? && current_user.admin? %>
-<% else %>
+
 <div class="d-flex justify-content-end">
   <% if current_user.present? && current_user.admin? %>
     <%= link_to new_product_path, style: "text-decoration: none;" do %>
@@ -8,7 +7,7 @@
   <% end %>
 </div>
 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1500">
-  <div class="carousel-inner">
+  <div class="carousel-inner" style="height:60%;">
     <div class="carousel-item active">
       <img class="d-block" src="https://images.unsplash.com/photo-1483181957632-8bda974cbc91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="1900" height="590">
     </div>
@@ -31,7 +30,7 @@
 <br>
 <ul class="nav justify-content-center">
 <li class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Men's Wear</a>
+<a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Men's Wear</a>
 <ul class="dropdown-menu">
   <li><a class="dropdown-item" href="categories/1">Top Wear</a></li>
   <li><a class="dropdown-item" href="categories/7">Bottom Wear</a></li>
@@ -42,7 +41,7 @@
 </ul>
 </li>
 <li class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Women's Wear</a>
+<a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Women's Wear</a>
 <ul class="dropdown-menu">
 <li><a class="dropdown-item" href="categories/2">Top Wear</a></li>
 <li><a class="dropdown-item" href="categories/8">Bottom Wear</a></li>
@@ -51,7 +50,7 @@
 </ul>
 </li>
 <li class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Chidren's Waer</a>
+<a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Chidren's Waer</a>
 <ul class="dropdown-menu">
 <li><a class="dropdown-item" href="categories/3">Top Wear</a></li>
 <li><a class="dropdown-item" href="categories/9">Bottom Wear</a></li>
@@ -61,12 +60,12 @@
 </li>
 </ul>
 
-<div class="row row-cols-1 row-cols-md-3 g-4 mt-4  justify-content-center">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4  justify-content-center">
     <% @categories.each do |category|%>
-        <div class="card m-1" style="width: 28rem; height: 34rem;">
+        <div class="card m-1" style="width: 22rem; height: 45rem;">
         <%= link_to products_products_path(category: category.id), style: "text-decoration: none;" do %>
         <% if category.images.attached? %>
-          <%= image_tag category.images.first, class:"card-img-top", size:"350x350"%>
+          <%= image_tag category.images.first, class:"card-img-top", size:"400x500"%>
         <% end %>
         <div class="card-body">
         <h5 class="card-title text-dark"><%= category.name %></h5>
@@ -78,4 +77,3 @@
     </div>
     <% end %>
     </div>
-<% end %>
