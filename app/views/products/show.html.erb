@@ -96,10 +96,10 @@
         <br>
         <div id="similar-products-carousel" class="justify-content-center">
   <% @product.similar_products.each do |similar_product| %>
-    <div class="card m-1" style="width: 20rem; height: 30rem;">
+    <div class="card m-1">
       <%= link_to product_similar_product_path(@product, similar_product), style: "text-decoration: none;" do %>
         <% if similar_product.images.attached? %>
-          <%= image_tag similar_product.images.first, class: "card-img-top", size: "250x300" %>
+          <%= image_tag similar_product.images.first, class: "card-img-top ratio ratio-1x1" ,style:"height:500px;"%>
         <% end %>
         <div class="card-body">
           <h5 class="card-title text-dark"><%= similar_product.name %></h5>

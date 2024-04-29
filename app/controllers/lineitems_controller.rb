@@ -31,7 +31,12 @@ class LineitemsController < ApplicationController
         quantity = params[:quantity].to_i
             if lineitem.present?
              lineitem = @cart.add_product(product, quantity, size_id)
-             size_id = size_id.to_i # Convert size_id to integer if necessary
+             size_id = size_id.to_i 
+             p size_id
+             p 'wwwwwwwwww'
+             p 'wwwwwwwwww'
+             p 'wwwwwwwwww'
+             p 'wwwwwwwwww'
              lineitem.size << Size.find(size_id)
              lineitem.save
             else

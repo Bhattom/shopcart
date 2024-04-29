@@ -1,5 +1,6 @@
 class PaymentsController < ApplicationController
   require 'prawn'
+  skip_before_action :verify_authenticity_token
     def new
         @payment = Payment.new
         @cart = current_user.carts.last
@@ -56,6 +57,7 @@ class PaymentsController < ApplicationController
     end
 
     def success
+      payment_mode = params[:payment_mode]
       render 'success'
       end
       
@@ -98,6 +100,12 @@ class PaymentsController < ApplicationController
           items = @cart.lineitems
           @cart = current_user.carts.last
           payment_mode = params[:payment_mode]
+          p payment_mode
+          p 'wwwww'
+          p 'wwwww'
+          p 'wwwww'
+          p 'wwwww'
+          p 'wwwww'
           pdf_content = generate_pdf(user, items, payment_mode)
           send_data pdf_content, filename: "Invoice Bill.pdf", type: "application/pdf"
         end

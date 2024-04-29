@@ -81,14 +81,10 @@ class UsersController < ApplicationController
     user = User.find(user_id)
 
     if user.validate_and_consume_otp!(params[:otp_attempt])
-      # OTP is correct. Log the user in
       sign_in(:user, user)
       redirect_to root_path, notice: 'Logged in successfully!'
     else
       flash[:alert] = 'Invalid OTP code.'
-      # Send them back to the sign in page, but don't show them the OTP entry page again.
-      # This is because we don't want the user to know whether the OTP code was invalid
-      # because they didn't fill out the form correctly, or if the OTP code was just wrong.
       redirect_to new_user_session_path
     end
   end
